@@ -43,7 +43,7 @@ class QueueWorkBatchCommand extends Command
     {
 
         try {
-            $this->handle();
+            $this->runJob();
         } catch (\Exception $e) {
             if ($this->exceptions) {
                 $this->exceptions->report($e);
@@ -57,7 +57,7 @@ class QueueWorkBatchCommand extends Command
         }
     }
 
-    protected function handle()
+    protected function runJob()
     {
         $maxTries = $this->option('tries');
         $delay = 0;
