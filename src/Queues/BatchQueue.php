@@ -1,16 +1,15 @@
 <?php
 /**
- * Laravel Queue for AWS Batch
+ * Laravel Queue for AWS Batch.
  *
  * @author    Luke Waite <lwaite@gmail.com>
  * @copyright 2017 Luke Waite
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/lukewaite/laravel-queue-aws-batch
  */
 
-
 namespace LukeWaite\LaravelQueueAwsBatch\Queues;
-
 
 use Aws\Batch\BatchClient;
 use Illuminate\Database\Connection;
@@ -21,11 +20,10 @@ use LukeWaite\LaravelQueueAwsBatch\Jobs\BatchJob;
 
 class BatchQueue extends DatabaseQueue
 {
-
     /**
-     * The AWS Batch client
+     * The AWS Batch client.
      *
-     * @var $batch BatchClient
+     * @var BatchClient
      */
     protected $batch;
 
@@ -34,8 +32,8 @@ class BatchQueue extends DatabaseQueue
     public function __construct(
         Connection $database,
         $table,
-        $default = 'default',
-        $expire = 60,
+        $default,
+        $expire,
         $jobDefinition,
         BatchClient $batch
     ) {
@@ -44,11 +42,10 @@ class BatchQueue extends DatabaseQueue
         parent::__construct($database, $table, $default, $expire);
     }
 
-
     public function push($job, $data = '', $queue = null)
     {
         return $this->pushToBatch($queue, $this->createPayload($job, $data),
-            str_replace('\\', '_', (string)get_class($job)));
+            str_replace('\\', '_', (string) get_class($job)));
     }
 
     public function pushRaw($payload, $queue = null, array $options = [])
@@ -59,10 +56,11 @@ class BatchQueue extends DatabaseQueue
     /**
      * Push a raw payload to the database, then to AWS Batch, with a given delay.
      *
-     * @param  string|null $queue
-     * @param  string $payload
-     * @param  string $jobName
-     * @param  int $attempts
+     * @param string|null $queue
+     * @param string      $payload
+     * @param string      $jobName
+     * @param int         $attempts
+     *
      * @return mixed
      */
     public function pushToBatch($queue, $payload, $jobName, $attempts = 0)
@@ -71,18 +69,18 @@ class BatchQueue extends DatabaseQueue
 
         return $this->batch->submitJob([
             'jobDefinition' => $this->jobDefinition,
-            'jobName' => $jobName,
-            'jobQueue' => $this->getQueue($queue),
-            'parameters' => [
-                'jobId' => $jobId
-            ]
+            'jobName'       => $jobName,
+            'jobQueue'      => $this->getQueue($queue),
+            'parameters'    => [
+                'jobId' => $jobId,
+            ],
         ]);
     }
 
     public function getJobById($id, $queue)
     {
         $job = $this->database->table($this->table)->where('id', $id)->first();
-        if (!isset($job)){
+        if (!isset($job)) {
             throw new JobNotFoundException('Could not find the job');
         }
 
@@ -91,13 +89,15 @@ class BatchQueue extends DatabaseQueue
         );
     }
 
-    public function release($queue, $job, $delay) {
+    public function release($queue, $job, $delay)
+    {
         $attributes = [
-            'id' => $job->id,
-            'attempts' => $job->attempts,
-            'reserved' => 0,
-            'reserved_at' => null
+            'id'          => $job->id,
+            'attempts'    => $job->attempts,
+            'reserved'    => 0,
+            'reserved_at' => null,
         ];
+
         return $this->database->table($this->table)->update($attributes);
     }
 
@@ -116,5 +116,4 @@ class BatchQueue extends DatabaseQueue
     {
         throw new UnsupportedException('The BatchQueue does not support the later() operation.');
     }
-
 }

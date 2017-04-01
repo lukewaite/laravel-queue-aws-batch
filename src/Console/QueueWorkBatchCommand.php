@@ -1,10 +1,11 @@
 <?php
 /**
- * Laravel Queue for AWS Batch
+ * Laravel Queue for AWS Batch.
  *
  * @author    Luke Waite <lwaite@gmail.com>
  * @copyright 2017 Luke Waite
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/lukewaite/laravel-queue-aws-batch
  */
 
@@ -41,7 +42,6 @@ class QueueWorkBatchCommand extends Command
 
     public function fire()
     {
-
         try {
             $this->runJob();
         } catch (\Exception $e) {
@@ -72,7 +72,6 @@ class QueueWorkBatchCommand extends Command
         /** @var BatchQueue $connection */
         $connection = $this->manager->connection($connectionName);
 
-
         if (!$connection instanceof BatchQueue) {
             throw new UnsupportedException('queue:work-batch can only be run on batch queues');
         }
@@ -88,6 +87,6 @@ class QueueWorkBatchCommand extends Command
         }
 
         // If we hit this point, we haven't processed our job
-        throw new JobNotFoundException("No job was returned");
+        throw new JobNotFoundException('No job was returned');
     }
 }
