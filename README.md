@@ -1,5 +1,5 @@
 ## Laravel Queue for AWS Batch
-This package is currently built out for Laravel 5.1 as most of my work relies LTS builds. Support will be coming for 5.4.
+This package is currently built out for Laravel 5.1 as most of my work requires use of LTS builds. Support will be coming for 5.4.
 
 ### Usage
 1. Your Laravel application will need to be dockerized and pushed into a container registry of your choice. The `ENTRYPOINT`
