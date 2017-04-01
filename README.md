@@ -6,7 +6,7 @@ This package is currently built out for Laravel 5.1 as most of my work relies LT
    should be set to `artisan`. 
 
 2. Add a new queue to your `config/queues.php` config file's `connections` array:
-```json
+```
     [
         'batch' => [
             'driver' => 'batch',
