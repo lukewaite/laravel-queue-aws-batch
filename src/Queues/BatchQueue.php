@@ -15,6 +15,7 @@ namespace LukeWaite\LaravelQueueAwsBatch\Queues;
 use Aws\Batch\BatchClient;
 use Illuminate\Database\Connection;
 use Illuminate\Queue\DatabaseQueue;
+use LukeWaite\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
 use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 use LukeWaite\LaravelQueueAwsBatch\Jobs\BatchJob;
 
@@ -81,12 +82,24 @@ class BatchQueue extends DatabaseQueue
     public function getJobById($id, $queue)
     {
         $job = $this->database->table($this->table)->where('id', $id)->first();
+        if (!isset($job)){
+            throw new JobNotFoundException('Could not find the job');
+        }
 
         return new BatchJob(
             $this->container, $this, $job, $queue
         );
     }
 
+    public function release($queue, $job, $delay) {
+        $attributes = [
+            'id' => $job->id,
+            'attempts' => $job->attempts,
+            'reserved' => 0,
+            'reserved_at' => null
+        ];
+        return $this->database->table($this->table)->update($attributes);
+    }
 
     public function pop($queue = null)
     {

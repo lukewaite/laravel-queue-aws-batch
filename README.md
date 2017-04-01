@@ -61,3 +61,10 @@ this requirement can be relaxed later.
 
 6. Add the Service Provider to your application:
     * In `config/app.php` add to the `providers` array: `LukeWaite\LaravelQueueAwsBatch\BatchQueueServiceProvider::class`
+    
+    
+### Known Issues
+* `$delay` is not supported, for initial job sends or for retries. This is a limitation on the Batch side, and as it's
+our runner, and the DB queue is just backing it to ship the jobs more easily, we don't have an easy work around. If you
+require delayed jobs for your use case, at this point my recommendation would be to use a regular DB queue, and to fire
+a job into it which will fire your batch job at the correct time.

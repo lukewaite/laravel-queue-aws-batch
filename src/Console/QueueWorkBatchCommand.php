@@ -48,11 +48,15 @@ class QueueWorkBatchCommand extends Command
             if ($this->exceptions) {
                 $this->exceptions->report($e);
             }
+            $this->error($e->getMessage());
+            $this->error($e->getTrace());
             exit(1);
         } catch (\Throwable $e) {
             if ($this->exceptions) {
                 $this->exceptions->report(new FatalThrowableError($e));
             }
+            $this->error($e->getMessage());
+            $this->error($e->getTrace());
             exit(1);
         }
     }
