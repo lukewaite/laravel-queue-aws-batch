@@ -1,10 +1,11 @@
 <?php
 /**
- * Laravel Queue for AWS Batch
+ * Laravel Queue for AWS Batch.
  *
  * @author    Luke Waite <lwaite@gmail.com>
  * @copyright 2017 Luke Waite
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/lukewaite/laravel-queue-aws-batch
  */
 
@@ -17,11 +18,11 @@ use LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue;
 
 class BatchConnector extends DatabaseConnector
 {
-
     /**
      * Establish a queue connection.
      *
-     * @param  array $config
+     * @param array $config
+     *
      * @return \Illuminate\Contracts\Queue\Queue
      */
     public function connect(array $config)
@@ -33,8 +34,8 @@ class BatchConnector extends DatabaseConnector
             Arr::get($config, 'expire', 60),
             $config['jobDefinition'],
             new BatchClient([
-                'region' => $config['region'],
-                'version' => '2016-08-10'
+                'region'  => $config['region'],
+                'version' => '2016-08-10',
             ])
         );
     }

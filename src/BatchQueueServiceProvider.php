@@ -1,10 +1,11 @@
 <?php
 /**
- * Laravel Queue for AWS Batch
+ * Laravel Queue for AWS Batch.
  *
  * @author    Luke Waite <lwaite@gmail.com>
  * @copyright 2017 Luke Waite
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
+ *
  * @link      https://github.com/lukewaite/laravel-queue-aws-batch
  */
 
@@ -13,7 +14,6 @@ namespace LukeWaite\LaravelQueueAwsBatch;
 use Illuminate\Support\ServiceProvider;
 use LukeWaite\LaravelQueueAwsBatch\Connectors\BatchConnector;
 use LukeWaite\LaravelQueueAwsBatch\Console\QueueWorkBatchCommand;
-
 
 class BatchQueueServiceProvider extends ServiceProvider
 {
@@ -33,14 +33,16 @@ class BatchQueueServiceProvider extends ServiceProvider
         $this->commands('command.queueawsbatch.work-batch');
     }
 
-    public function boot() {
+    public function boot()
+    {
         $this->registerBatchConnector($this->app['queue']);
     }
 
     /**
      * Register the Batch queue connector.
      *
-     * @param  \Illuminate\Queue\QueueManager $manager
+     * @param \Illuminate\Queue\QueueManager $manager
+     *
      * @return void
      */
     protected function registerBatchConnector($manager)
