@@ -1,5 +1,6 @@
 <?php
-/**
+
+/*
  * Laravel Queue for AWS Batch.
  *
  * @author    Luke Waite <lwaite@gmail.com>
