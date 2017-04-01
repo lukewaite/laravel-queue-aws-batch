@@ -1,0 +1,18 @@
+{
+  "name": "lukewaite/laravel-queue-aws-batch",
+  "autoload": {
+    "psr-4": {
+      "LukeWaite\\LaravelQueueAwsBatch\\": "src/"
+    }
+  },
+  "require": {
+    "illuminate/support": ">5.1 <5.2",
+    "aws/aws-sdk-php": "^3.20.6"
+  },
+  "require-dev": {
+    "orchestra/testbench": "3.1.7",
+    "phpunit/phpunit": "~4.0",
+    "mockery/mockery": "^0.9.6",
+    "laravel/framework": "~5.1"
+  }
+}
