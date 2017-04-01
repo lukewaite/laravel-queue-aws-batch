@@ -31,7 +31,9 @@ class BatchQueueServiceProvider extends ServiceProvider
         );
 
         $this->commands('command.queueawsbatch.work-batch');
+    }
 
+    public function boot() {
         $this->registerBatchConnector($this->app['queue']);
     }
 

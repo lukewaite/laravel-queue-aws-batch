@@ -58,3 +58,6 @@ It is important that you configure a retryStrategy with more "attempts" than you
 argument. Otherwise, Batch will not retry your job if it fails. Laravel 5.1 does not write to the failed job queue until
 the _next_ run after tries has been exceeded by jobs failing. Newer versions will write to the queue in the same run, so
 this requirement can be relaxed later.
+
+6. Add the Service Provider to your application:
+    * In `config/app.php` add to the `providers` array: `LukeWaite\LaravelQueueAwsBatch\BatchQueueServiceProvider::class`
