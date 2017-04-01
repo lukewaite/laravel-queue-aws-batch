@@ -37,5 +37,4 @@ class BatchJob extends DatabaseJob
 
         $this->database->release($this->queue, $this->job, $delay);
     }
-
 }

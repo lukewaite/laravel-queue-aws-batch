@@ -14,7 +14,6 @@ use Illuminate\Support\ServiceProvider;
 use LukeWaite\LaravelQueueAwsBatch\Connectors\BatchConnector;
 use LukeWaite\LaravelQueueAwsBatch\Console\QueueWorkBatchCommand;
 
-
 class BatchQueueServiceProvider extends ServiceProvider
 {
     public function register()
@@ -33,7 +32,8 @@ class BatchQueueServiceProvider extends ServiceProvider
         $this->commands('command.queueawsbatch.work-batch');
     }
 
-    public function boot() {
+    public function boot()
+    {
         $this->registerBatchConnector($this->app['queue']);
     }
 

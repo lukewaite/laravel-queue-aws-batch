@@ -41,7 +41,6 @@ class QueueWorkBatchCommand extends Command
 
     public function fire()
     {
-
         try {
             $this->runJob();
         } catch (\Exception $e) {

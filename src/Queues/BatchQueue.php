@@ -11,7 +11,6 @@
 
 namespace LukeWaite\LaravelQueueAwsBatch\Queues;
 
-
 use Aws\Batch\BatchClient;
 use Illuminate\Database\Connection;
 use Illuminate\Queue\DatabaseQueue;
@@ -82,7 +81,7 @@ class BatchQueue extends DatabaseQueue
     public function getJobById($id, $queue)
     {
         $job = $this->database->table($this->table)->where('id', $id)->first();
-        if (!isset($job)){
+        if (!isset($job)) {
             throw new JobNotFoundException('Could not find the job');
         }
 
@@ -91,7 +90,8 @@ class BatchQueue extends DatabaseQueue
         );
     }
 
-    public function release($queue, $job, $delay) {
+    public function release($queue, $job, $delay)
+    {
         $attributes = [
             'id' => $job->id,
             'attempts' => $job->attempts,
@@ -116,5 +116,4 @@ class BatchQueue extends DatabaseQueue
     {
         throw new UnsupportedException('The BatchQueue does not support the later() operation.');
     }
-
 }
