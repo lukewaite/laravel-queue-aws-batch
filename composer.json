@@ -1,5 +1,8 @@
 {
   "name": "lukewaite/laravel-queue-aws-batch",
+  "description": "Laravel Queue for AWS Batch, enabling users to submit jobs for processing to a Batch queue.",
+  "keywords": ["laravel", "aws", "batch", "queue"],
+  "license": "MIT",
   "autoload": {
     "psr-4": {
       "LukeWaite\\LaravelQueueAwsBatch\\": "src/"
