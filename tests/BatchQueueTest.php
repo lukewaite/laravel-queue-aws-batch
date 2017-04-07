@@ -68,10 +68,11 @@ class BatchQueueTest extends TestCase
         $queue->getJobById(1, 'default');
     }
 
+    /**
+     * @expectedException LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
+     */
     public function testPopThrowsException()
     {
-        $this->expectException('LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException');
-
         /** @var \LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue $queue */
         $queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
             $database = m::mock('Illuminate\Database\Connection'),
@@ -85,10 +86,11 @@ class BatchQueueTest extends TestCase
         $queue->pop('default');
     }
 
+    /**
+     * @expectedException LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
+     */
     public function testLaterThrowsException()
     {
-        $this->expectException('LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException');
-
         /** @var \LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue $queue */
         $queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
             $database = m::mock('Illuminate\Database\Connection'),
@@ -99,6 +101,6 @@ class BatchQueueTest extends TestCase
             $batch = m::mock('Aws\Batch\BatchClient')
         ])->getMock();
 
-        $queue->later(10,'default');
+        $queue->later(10, 'default');
     }
 }
