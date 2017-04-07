@@ -12,9 +12,12 @@ cache:
   directories:
     - $HOME/.composer/cache
 
+env:
+  global:
+    - laravel=51
+
 matrix:
   include:
-    - env: laravel=51
     - env: laravel=54
 
 install:
