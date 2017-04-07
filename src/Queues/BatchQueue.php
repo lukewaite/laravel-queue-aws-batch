@@ -67,7 +67,6 @@ class BatchQueue extends DatabaseQueue
         } else {
             return is_string($job) ? explode('@', $job)[0] : null;
         }
-
     }
 
     /**
@@ -81,7 +80,6 @@ class BatchQueue extends DatabaseQueue
      */
     protected function pushToBatch($queue, $payload, $jobName)
     {
-
         $jobId = $this->pushToDatabase(0, $queue, $payload);
 //        $jobId = $this->pushToDatabase( $queue, $payload);
 
