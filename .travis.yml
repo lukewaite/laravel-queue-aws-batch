@@ -6,13 +6,18 @@ php:
   - 7.0
   - 7.1
 
-cache:
-  directories:
-    - $HOME/.composer/cache
-
 env:
   - laravel=51
   - laravel=54
+
+matrix:
+  exclude:
+    - php: 5.5
+      env: laravel=51
+
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 install:
   - if [[ $laravel = '51' ]]; then travis_retry composer require laravel/framework ~5.1.0; fi
