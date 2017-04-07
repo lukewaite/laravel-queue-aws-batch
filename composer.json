@@ -3,38 +3,18 @@
   "description": "Laravel Queue for AWS Batch, enabling users to submit jobs for processing to a Batch queue.",
   "keywords": ["laravel", "aws", "batch", "queue"],
   "license": "MIT",
-  "authors": [
-    {
-      "name": "Luke Waite",
-      "email": "lwaite@gmail.com"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "LukeWaite\\LaravelQueueAwsBatch\\": "src/"
     }
   },
   "require": {
-<<<<<<< Updated upstream
     "illuminate/support": "~5.1.0",
     "aws/aws-sdk-php": "^3.20.6"
-=======
-    "illuminate/support": ">5.1 <5.2",
-    "aws/aws-sdk-php": "^3.20.6",
-    "squizlabs/php_codesniffer": "^2.8"
->>>>>>> Stashed changes
   },
   "require-dev": {
     "mockery/mockery": "^0.9.6",
-<<<<<<< Updated upstream
     "laravel/framework": "~5.1.0",
     "phpunit/phpunit": "~4.8"
-=======
-    "laravel/framework": "~5.1"
-  },
-  "scripts": {
-    "test": "phpunit",
-    "cs": "phpcs --standard=psr2 src/"
->>>>>>> Stashed changes
   }
 }
