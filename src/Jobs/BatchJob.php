@@ -12,6 +12,7 @@
 namespace LukeWaite\LaravelQueueAwsBatch\Jobs;
 
 use Illuminate\Queue\Jobs\DatabaseJob;
+use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 
 class BatchJob extends DatabaseJob
 {
@@ -30,11 +31,16 @@ class BatchJob extends DatabaseJob
      * @param int $delay
      *
      * @return void
+     * @throws UnsupportedException
      */
     public function release($delay = 0)
     {
+        if ($delay != 0) {
+            throw new UnsupportedException('The BatchJob does not support releasing back onto the queue with a delay');
+        }
+
         $this->released = true;
 
-        $this->database->release($this->queue, $this->job, $delay);
+        $this->database->release($this->queue, $this->job, 0);
     }
 }
