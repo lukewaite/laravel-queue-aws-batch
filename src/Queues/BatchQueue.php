@@ -82,8 +82,8 @@ class BatchQueue extends DatabaseQueue
     protected function pushToBatch($queue, $payload, $jobName)
     {
 
-        $jobId = $this->pushToDatabase(0, $queue, $payload);
-//        $jobId = $this->pushToDatabase( $queue, $payload);
+//        $jobId = $this->pushToDatabase(0, $queue, $payload);
+        $jobId = $this->pushToDatabase( $queue, $payload);
 
 
         return $this->batch->submitJob([
@@ -108,21 +108,21 @@ class BatchQueue extends DatabaseQueue
         );
     }
 
-//    /**
-//     * Push a raw payload to the database with a given delay.
-//     *
-//     * @param  string|null  $queue
-//     * @param  string  $payload
-//     * @param  \DateTime|int  $delay
-//     * @param  int  $attempts
-//     * @return mixed
-//     */
-//    protected function pushToDatabase($queue, $payload, $delay = 0, $attempts = 0)
-//    {
-//        return $this->database->table($this->table)->insertGetId($this->buildDatabaseRecord(
-//            $this->getQueue($queue), $payload, $this->availableAt($delay), $attempts
-//        ));
-//    }
+    /**
+     * Push a raw payload to the database with a given delay.
+     *
+     * @param  string|null  $queue
+     * @param  string  $payload
+     * @param  \DateTime|int  $delay
+     * @param  int  $attempts
+     * @return mixed
+     */
+    protected function pushToDatabase($queue, $payload, $delay = 0, $attempts = 0)
+    {
+        return $this->database->table($this->table)->insertGetId($this->buildDatabaseRecord(
+            $this->getQueue($queue), $payload, 0, $attempts
+        ));
+    }
 
     public function release($queue, $job, $delay)
     {

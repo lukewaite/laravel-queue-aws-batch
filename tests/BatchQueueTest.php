@@ -19,7 +19,7 @@ class BatchQueueTest extends \PHPUnit_Framework_TestCase
 
         $query->shouldReceive('insertGetId')->once()->andReturnUsing(function ($array) {
             $this->assertEquals('default', $array['queue']);
-            $this->assertNotNull($array['payload']);
+            $this->assertNotNull($array['payload'], 'Payload is not set');
             $this->assertEquals(['data'], json_decode($array['payload'], 1)['data']);
             $this->assertEquals('foo', json_decode($array['payload'], 1)['job']);
             $this->assertEquals(0, $array['attempts']);
