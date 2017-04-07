@@ -1,5 +1,7 @@
 <?php
 
+namespace LukeWaite\LaravelQueueAwsBatch\Tests;
+
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
@@ -49,6 +51,22 @@ class BatchQueueTest extends TestCase
         });
 
         $this->queue->push('foo', ['data']);
+    }
+
+    public function testPushProperlySanitizesJobName()
+    {
+        $this->database->shouldReceive('table')->with('table')->andReturn($query = m::mock('StdClass'));
+
+        $query->shouldReceive('insertGetId')->once()->andReturnUsing(function ($array) {
+            return 1;
+        });
+
+        $this->batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
+            $this->assertRegExp('/^[a-zA-Z0-9_]+$/', $array['jobName']);
+            $this->assertEquals('LukeWaite_LaravelQueueAwsBatch_Tests_TestJob', $array['jobName']);
+        });
+
+        $this->queue->push(new TestJob());
     }
 
     public function testGetJobById()
@@ -107,4 +125,9 @@ class BatchQueueTest extends TestCase
 
         $this->queue->release('default', $job, 10);
     }
+}
+
+class TestJob
+{
+    //
 }

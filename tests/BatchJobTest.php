@@ -1,5 +1,7 @@
 <?php
 
+namespace LukeWaite\LaravelQueueAwsBatch\Tests;
+
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 

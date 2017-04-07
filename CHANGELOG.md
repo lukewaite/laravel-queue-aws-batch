@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+* Correct sanitation of job names which previously blocked creation of class based batch jobs
+
 ## v0.2.0 (2017-04-07)
 
 ### Added
