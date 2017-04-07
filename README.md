@@ -1,4 +1,9 @@
 ## Laravel Queue for AWS Batch
+
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE.md)
+[![Build Status][ico-travis]][link-travis]
+
 This package is currently built out for Laravel 5.1 as most of my work requires use of LTS builds. Support will be coming for 5.4.
 
 ### Usage
@@ -68,3 +73,10 @@ this requirement can be relaxed later.
 our runner, and the DB queue is just backing it to ship the jobs more easily, we don't have an easy work around. If you
 require delayed jobs for your use case, at this point my recommendation would be to use a regular DB queue, and to fire
 a job into it which will fire your batch job at the correct time.
+
+[ico-version]: https://img.shields.io/packagist/v/lukewaite/laravel-queue-aws-batch.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/lukewaite/laravel-queue-aws-batch/master.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/lukewaite/laravel-queue-aws-batch
+[link-travis]: https://travis-ci.org/lukewaite/laravel-queue-aws-batch
