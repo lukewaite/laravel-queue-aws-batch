@@ -10,26 +10,29 @@ class BatchJobTest extends TestCase
         m::close();
     }
 
-    public function testReleaseDoesntDeleteButDoesUpdate()
+    public function setUp()
     {
-        $job = new \stdClass();
-        $job->payload = '{"job":"foo","data":["data"]}';
-        $job->id = 4;
-        $job->queue = 'default';
-        $job->attempts = 1;
+        $this->job = new \stdClass();
+        $this->job->payload = '{"job":"foo","data":["data"]}';
+        $this->job->id = 4;
+        $this->job->queue = 'default';
+        $this->job->attempts = 1;
 
         /** @var \LukeWaite\LaravelQueueAwsBatch\Jobs\BatchJob $batchJob */
-        $batchJob = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Jobs\BatchJob')->setMethods(null)->setConstructorArgs([
+        $this->batchJob = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Jobs\BatchJob')->setMethods(null)->setConstructorArgs([
             m::mock('Illuminate\Container\Container'),
-            $batchQueue = m::mock('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue'),
-            $job,
+            $this->batchQueue = m::mock('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue'),
+            $this->job,
             'default'
         ])->getMock();
+    }
 
-        $batchQueue->shouldReceive('release')->once();
-        $batchQueue->shouldNotReceive('deleteReserved');
+    public function testReleaseDoesntDeleteButDoesUpdate()
+    {
+        $this->batchQueue->shouldReceive('release')->once();
+        $this->batchQueue->shouldNotReceive('deleteReserved');
 
-        $batchJob->release(0);
+        $this->batchJob->release(0);
     }
 
     /**
@@ -37,23 +40,9 @@ class BatchJobTest extends TestCase
      */
     public function testThrowsExceptionOnReleaseWIthDelay()
     {
-        $job = new \stdClass();
-        $job->payload = '{"job":"foo","data":["data"]}';
-        $job->id = 4;
-        $job->queue = 'default';
-        $job->attempts = 1;
+        $this->batchQueue->shouldNotReceive('release');
+        $this->batchQueue->shouldNotReceive('deleteReserved');
 
-        /** @var \LukeWaite\LaravelQueueAwsBatch\Jobs\BatchJob $batchJob */
-        $batchJob = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Jobs\BatchJob')->setMethods(null)->setConstructorArgs([
-            m::mock('Illuminate\Container\Container'),
-            $batchQueue = m::mock('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue'),
-            $job,
-            'default'
-        ])->getMock();
-
-        $batchQueue->shouldNotReceive('release');
-        $batchQueue->shouldNotReceive('deleteReserved');
-
-        $batchJob->release(10);
+        $this->batchJob->release(10);
     }
 }

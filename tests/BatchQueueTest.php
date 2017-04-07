@@ -10,19 +10,22 @@ class BatchQueueTest extends TestCase
         m::close();
     }
 
-    public function testPushProperlyPushesJobOntoDatabase()
+    public function setUp()
     {
         /** @var \LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue $queue */
-        $queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
-            $database = m::mock('Illuminate\Database\Connection'),
+        $this->queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
+            $this->database = m::mock('Illuminate\Database\Connection'),
             'table',
             'default',
             '60',
             'jobdefinition',
-            $batch = m::mock('Aws\Batch\BatchClient')
+            $this->batch = m::mock('Aws\Batch\BatchClient')
         ])->getMock();
+    }
 
-        $database->shouldReceive('table')->with('table')->andReturn($query = m::mock('StdClass'));
+    public function testPushProperlyPushesJobOntoDatabase()
+    {
+        $this->database->shouldReceive('table')->with('table')->andReturn($query = m::mock('StdClass'));
 
         $query->shouldReceive('insertGetId')->once()->andReturnUsing(function ($array) {
             $this->assertEquals('default', $array['queue']);
@@ -36,51 +39,31 @@ class BatchQueueTest extends TestCase
             return 100;
         });
 
-        $batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
+        $this->batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
             $this->assertEquals('jobdefinition', $array['jobDefinition']);
             $this->assertEquals('foo', $array['jobName']);
             $this->assertEquals('default', $array['jobQueue']);
             $this->assertEquals(['jobId' => 100], $array['parameters']);
         });
 
-        $queue->push('foo', ['data']);
+        $this->queue->push('foo', ['data']);
     }
 
     public function testGetJobById()
     {
-        /** @var \LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue $queue */
-        $queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
-            $database = m::mock('Illuminate\Database\Connection'),
-            'table',
-            'default',
-            '60',
-            'jobdefinition',
-            $batch = m::mock('Aws\Batch\BatchClient')
-        ])->getMock();
-
-        $database->shouldReceive('table')->once()->with('table')->andReturn($query = m::mock('StdClass'));
+        $this->database->shouldReceive('table')->once()->with('table')->andReturn($query = m::mock('StdClass'));
         $query->shouldReceive('where')->once()->with('id', 1)->andReturn($results = m::mock('StdClass'));
         $results->shouldReceive('first')->once()->andReturn($queryResult = m::mock('StdClass'));
         $queryResult->attempts = 0;
 
-        $queue->setContainer(m::mock('Illuminate\Container\Container'));
+        $this->queue->setContainer(m::mock('Illuminate\Container\Container'));
 
-        $queue->getJobById(1, 'default');
+        $this->queue->getJobById(1, 'default');
     }
 
     public function testRelease()
     {
-        /** @var \LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue $queue */
-        $queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
-            $database = m::mock('Illuminate\Database\Connection'),
-            'table',
-            'default',
-            '60',
-            'jobdefinition',
-            $batch = m::mock('Aws\Batch\BatchClient')
-        ])->getMock();
-
-        $database->shouldReceive('table')->once()->with('table')->andReturn($query = m::mock('StdClass'));
+        $this->database->shouldReceive('table')->once()->with('table')->andReturn($query = m::mock('StdClass'));
         $query->shouldReceive('update')->once()->with([
             'id'          => 4,
             'attempts'    => 1,
@@ -88,7 +71,7 @@ class BatchQueueTest extends TestCase
             'reserved_at' => null,
         ]);
 
-        $queue->setContainer(m::mock('Illuminate\Container\Container'));
+        $this->queue->setContainer(m::mock('Illuminate\Container\Container'));
 
         $job = new \stdClass();
         $job->payload = '{"job":"foo","data":["data"]}';
@@ -96,7 +79,7 @@ class BatchQueueTest extends TestCase
         $job->queue = 'default';
         $job->attempts = 1;
 
-        $queue->release('default', $job, 0);
+        $this->queue->release('default', $job, 0);
     }
 
     /**
@@ -104,17 +87,7 @@ class BatchQueueTest extends TestCase
      */
     public function testPopThrowsException()
     {
-        /** @var \LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue $queue */
-        $queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
-            $database = m::mock('Illuminate\Database\Connection'),
-            'table',
-            'default',
-            '60',
-            'jobdefinition',
-            $batch = m::mock('Aws\Batch\BatchClient')
-        ])->getMock();
-
-        $queue->pop('default');
+        $this->queue->pop('default');
     }
 
     /**
@@ -122,16 +95,6 @@ class BatchQueueTest extends TestCase
      */
     public function testLaterThrowsException()
     {
-        /** @var \LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue $queue */
-        $queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
-            $database = m::mock('Illuminate\Database\Connection'),
-            'table',
-            'default',
-            '60',
-            'jobdefinition',
-            $batch = m::mock('Aws\Batch\BatchClient')
-        ])->getMock();
-
-        $queue->later(10, 'default');
+        $this->queue->later(10, 'default');
     }
 }
