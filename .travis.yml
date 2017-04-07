@@ -1,0 +1,24 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+matrix:
+  include:
+    - env: laravel=51
+    - env: laravel=54
+
+install:
+  - if [[ $laravel = '51' ]]; then; travis_retry composer require laravel/framework ~5.1.0; fi
+  - if [[ $laravel = '54' ]]; then; travis_retry composer require laravel/framework ~5.4.0; fi
+
+script: vendor/bin/phpunit
