@@ -2,7 +2,6 @@
 
 class BatchQueueTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testPushProperlyPushesJobOntoDatabase()
     {
         $queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(['currentTime'])->setConstructorArgs([
@@ -29,7 +28,7 @@ class BatchQueueTest extends \PHPUnit_Framework_TestCase
             return 100;
         });
 
-        $batch->shouldReceive('submitJob')->once()->andReturnUsing(function($array) {
+        $batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
             $this->assertEquals('jobdefinition', $array['jobDefinition']);
             $this->assertEquals('foo', $array['jobName']);
             $this->assertEquals('default', $array['jobQueue']);
@@ -39,4 +38,3 @@ class BatchQueueTest extends \PHPUnit_Framework_TestCase
         $queue->push('foo', ['data']);
     }
 }
-
