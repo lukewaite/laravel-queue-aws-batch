@@ -13,12 +13,8 @@ cache:
     - $HOME/.composer/cache
 
 env:
-  global:
-    - laravel=51
-
-matrix:
-  include:
-    - env: laravel=54
+  - laravel=51
+  - laravel=54
 
 install:
   - if [[ $laravel = '51' ]]; then; travis_retry composer require laravel/framework ~5.1.0; fi
