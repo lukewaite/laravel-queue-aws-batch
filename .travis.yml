@@ -13,7 +13,7 @@ env:
 matrix:
   exclude:
     - php: 5.5
-      env: laravel=51
+      env: laravel=54
 
 cache:
   directories:
