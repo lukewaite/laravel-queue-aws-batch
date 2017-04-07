@@ -17,7 +17,7 @@ env:
   - laravel=54
 
 install:
-  - if [[ $laravel = 51 ]]; then; travis_retry composer require laravel/framework ~5.1.0; fi
-  - if [[ $laravel = 54 ]]; then; travis_retry composer require laravel/framework ~5.4.0; fi
+  - if [[ $laravel = '51' ]]; then travis_retry composer require laravel/framework ~5.1.0; fi
+  - if [[ $laravel = '54' ]]; then travis_retry composer require laravel/framework ~5.4.0; fi
 
 script: vendor/bin/phpunit
