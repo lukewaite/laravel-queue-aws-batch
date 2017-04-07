@@ -104,8 +104,22 @@ class BatchQueue extends DatabaseQueue
         );
     }
 
+    /**
+     * Release the job, without deleting first from the Queue
+     *
+     * @param string $queue
+     * @param \StdClass $job
+     * @param int $delay
+     *
+     * @return int
+     * @throws UnsupportedException
+     */
     public function release($queue, $job, $delay)
     {
+        if ($delay != 0) {
+            throw new UnsupportedException('The BatchJob does not support releasing back onto the queue with a delay');
+        }
+
         $attributes = [
             'id'          => $job->id,
             'attempts'    => $job->attempts,

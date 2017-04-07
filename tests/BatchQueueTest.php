@@ -21,6 +21,8 @@ class BatchQueueTest extends TestCase
             'jobdefinition',
             $this->batch = m::mock('Aws\Batch\BatchClient')
         ])->getMock();
+
+        $this->queue->setContainer(m::mock('Illuminate\Container\Container'));
     }
 
     public function testPushProperlyPushesJobOntoDatabase()
@@ -56,8 +58,6 @@ class BatchQueueTest extends TestCase
         $results->shouldReceive('first')->once()->andReturn($queryResult = m::mock('StdClass'));
         $queryResult->attempts = 0;
 
-        $this->queue->setContainer(m::mock('Illuminate\Container\Container'));
-
         $this->queue->getJobById(1, 'default');
     }
 
@@ -71,8 +71,6 @@ class BatchQueueTest extends TestCase
             'reserved_at' => null,
         ]);
 
-        $this->queue->setContainer(m::mock('Illuminate\Container\Container'));
-
         $job = new \stdClass();
         $job->payload = '{"job":"foo","data":["data"]}';
         $job->id = 4;
@@ -83,7 +81,7 @@ class BatchQueueTest extends TestCase
     }
 
     /**
-     * @expectedException LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
+     * @expectedException \LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
      */
     public function testPopThrowsException()
     {
@@ -91,10 +89,22 @@ class BatchQueueTest extends TestCase
     }
 
     /**
-     * @expectedException LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
+     * @expectedException \LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
      */
     public function testLaterThrowsException()
     {
         $this->queue->later(10, 'default');
+    }
+
+    /** @expectedException \LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException */
+    public function testReleaseWithDelayThrowsException()
+    {
+        $job = new \stdClass();
+        $job->payload = '{"job":"foo","data":["data"]}';
+        $job->id = 4;
+        $job->queue = 'default';
+        $job->attempts = 1;
+
+        $this->queue->release('default', $job, 10);
     }
 }
