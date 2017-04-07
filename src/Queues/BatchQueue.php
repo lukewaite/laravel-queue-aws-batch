@@ -44,8 +44,8 @@ class BatchQueue extends DatabaseQueue
 
     public function push($job, $data = '', $queue = null)
     {
-        return $this->pushToBatch($queue, $this->createPayload($job, $data),
-            str_replace('\\', '_', (string) get_class($job)));
+        $payload = $this->createPayload($job, $data);
+        return $this->pushToBatch($queue, $payload, $this->getDisplayName($job));
     }
 
     public function pushRaw($payload, $queue = null, array $options = [])
@@ -54,18 +54,33 @@ class BatchQueue extends DatabaseQueue
     }
 
     /**
+     * Get the display name for the given job.
+     *
+     * @param  mixed  $job
+     * @return string
+     */
+    protected function getDisplayName($job)
+    {
+        if (is_object($job)) {
+            return method_exists($job, 'displayName')
+                ? $job->displayName() : get_class($job);
+        } else {
+            return is_string($job) ? explode('@', $job)[0] : null;
+        }
+    }
+
+    /**
      * Push a raw payload to the database, then to AWS Batch, with a given delay.
      *
      * @param string|null $queue
      * @param string      $payload
      * @param string      $jobName
-     * @param int         $attempts
      *
      * @return mixed
      */
-    public function pushToBatch($queue, $payload, $jobName, $attempts = 0)
+    protected function pushToBatch($queue, $payload, $jobName)
     {
-        $jobId = $this->pushToDatabase(0, $queue, $payload, $attempts);
+        $jobId = $this->pushToDatabase($queue, $payload);
 
         return $this->batch->submitJob([
             'jobDefinition' => $this->jobDefinition,
@@ -73,7 +88,7 @@ class BatchQueue extends DatabaseQueue
             'jobQueue'      => $this->getQueue($queue),
             'parameters'    => [
                 'jobId' => $jobId,
-            ],
+            ]
         ]);
     }
 
@@ -87,6 +102,22 @@ class BatchQueue extends DatabaseQueue
         return new BatchJob(
             $this->container, $this, $job, $queue
         );
+    }
+
+    /**
+     * Push a raw payload to the database with a given delay.
+     *
+     * @param  string|null  $queue
+     * @param  string  $payload
+     * @param  \DateTime|int  $delay
+     * @param  int  $attempts
+     * @return mixed
+     */
+    protected function pushToDatabase($queue, $payload, $delay = 0, $attempts = 0)
+    {
+        return $this->database->table($this->table)->insertGetId($this->buildDatabaseRecord(
+            $this->getQueue($queue), $payload, 0, $attempts
+        ));
     }
 
     public function release($queue, $job, $delay)
