@@ -21,7 +21,7 @@ class BatchQueueServiceProvider extends ServiceProvider
     {
         $this->app->singleton(
             'command.queueawsbatch.work-batch',
-            function ($app) {
+            function($app) {
                 return new QueueWorkBatchCommand(
                     $app['queue'],
                     $app['queue.worker'],
@@ -47,7 +47,7 @@ class BatchQueueServiceProvider extends ServiceProvider
      */
     protected function registerBatchConnector($manager)
     {
-        $manager->addConnector('batch', function () {
+        $manager->addConnector('batch', function() {
             return new BatchConnector($this->app['db']);
         });
     }
