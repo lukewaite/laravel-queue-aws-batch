@@ -76,13 +76,13 @@ class BatchQueue extends DatabaseQueue
      * @param string      $payload
      * @param string      $jobName
      *
-     * @return mixed
+     * @return int
      */
     protected function pushToBatch($queue, $payload, $jobName)
     {
         $jobId = $this->pushToDatabase(0, $queue, $payload);
 
-        return $this->batch->submitJob([
+        $this->batch->submitJob([
             'jobDefinition' => $this->jobDefinition,
             'jobName'       => $jobName,
             'jobQueue'      => $this->getQueue($queue),
@@ -90,6 +90,8 @@ class BatchQueue extends DatabaseQueue
                 'jobId' => $jobId,
             ]
         ]);
+
+        return $jobId;
     }
 
     public function getJobById($id, $queue)
@@ -100,7 +102,10 @@ class BatchQueue extends DatabaseQueue
         }
 
         return new BatchJob(
-            $this->container, $this, $job, $queue
+            $this->container,
+            $this,
+            $job,
+            $queue
         );
     }
 
@@ -120,19 +125,17 @@ class BatchQueue extends DatabaseQueue
             throw new UnsupportedException('The BatchJob does not support releasing back onto the queue with a delay');
         }
 
-        $attributes = [
-            'id'          => $job->id,
+        return $this->database->table($this->table)->where('id', $job->id)->update([
             'attempts'    => $job->attempts,
             'reserved'    => 0,
-            'reserved_at' => null,
-        ];
-
-        return $this->database->table($this->table)->update($attributes);
+            'reserved_at' => null
+        ]);
     }
 
     public function pop($queue = null)
     {
-        throw new UnsupportedException('The BatchQueue does not support running via a regular worker. Instead, you should use the queue:batch-work command with a job id.');
+        throw new UnsupportedException('The BatchQueue does not support running via a regular worker. ' .
+            'Instead, you should use the queue:batch-work command with a job id.');
     }
 
     public function bulk($jobs, $data = '', $queue = null)

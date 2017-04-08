@@ -4,6 +4,9 @@
 
 ### Fixed
 * Correct sanitation of job names which previously blocked creation of class based batch jobs
+* Fix: Failing jobs throw exception when logging about failing (Array to String Conversion)
+* Fix: `BatchQueue` methods `->push` and `->update` now return the `id` of the entry
+* Fix: BatchQueue now properly releases failed jobs back into the queue
 
 ## v0.2.0 (2017-04-07)
 

@@ -49,14 +49,14 @@ class QueueWorkBatchCommand extends Command
                 $this->exceptions->report($e);
             }
             $this->error($e->getMessage());
-            $this->error($e->getTrace());
+            $this->error($e->getTraceAsString());
             exit(1);
         } catch (\Throwable $e) {
             if ($this->exceptions) {
                 $this->exceptions->report(new FatalThrowableError($e));
             }
             $this->error($e->getMessage());
-            $this->error($e->getTrace());
+            $this->error($e->getTraceAsString());
             exit(1);
         }
     }
@@ -82,7 +82,10 @@ class QueueWorkBatchCommand extends Command
         // then immediately return back out.
         if (!is_null($job)) {
             return $this->worker->process(
-                $this->manager->getName($connectionName), $job, $maxTries, $delay
+                $this->manager->getName($connectionName),
+                $job,
+                $maxTries,
+                $delay
             );
         }
 
