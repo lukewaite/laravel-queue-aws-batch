@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## v0.2.1 (2017-04-07)
+
 ### Fixed
 * Correct sanitation of job names which previously blocked creation of class based batch jobs
 * Fix: Failing jobs throw exception when logging about failing (Array to String Conversion)
