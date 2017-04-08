@@ -3,7 +3,7 @@
 [![Latest Version on Packagist][ico-version]][link-packagist]
 [![Software License][ico-license]](LICENSE.md)
 [![Build Status][ico-travis]][link-travis]
-![Coverage][ico-coverage]
+[![Code Coverage][ico-coverage]][link-coverage]
 
 This package is currently built out for Laravel 5.1 as most of my work requires use of LTS builds. Support will be coming for 5.4.
 
@@ -82,3 +82,4 @@ a job into it which will fire your batch job at the correct time.
 
 [link-packagist]: https://packagist.org/packages/lukewaite/laravel-queue-aws-batch
 [link-travis]: https://travis-ci.org/lukewaite/laravel-queue-aws-batch
+[link-coverage]: https://scrutinizer-ci.com/g/lukewaite/laravel-queue-aws-batch/?branch=master
