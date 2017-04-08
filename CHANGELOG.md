@@ -5,10 +5,10 @@
 ## v0.2.1 (2017-04-07)
 
 ### Fixed
-* Correct sanitation of job names which previously blocked creation of class based batch jobs
-* Fix: Failing jobs throw exception when logging about failing (Array to String Conversion)
-* Fix: `BatchQueue` methods `->push` and `->update` now return the `id` of the entry
-* Fix: BatchQueue now properly releases failed jobs back into the queue
+* Correct sanitation of job names which previously blocked creation of class based batch jobs [#22](https://github.com/lukewaite/laravel-queue-aws-batch/pull/22)
+* Fix: Failing jobs throw exception when logging about failing (Array to String Conversion) [#d1a5023](https://github.com/lukewaite/laravel-queue-aws-batch/commit/6118f5bdf18935ce346d9628dcd1670f98d8e238)
+* Fix: `BatchQueue` methods `->push` and `->update` now return the `id` of the entry [#d1a5023](https://github.com/lukewaite/laravel-queue-aws-batch/commit/6118f5bdf18935ce346d9628dcd1670f98d8e238)
+* Fix: BatchQueue now properly releases failed jobs back into the queue [#d1a5023](https://github.com/lukewaite/laravel-queue-aws-batch/commit/6118f5bdf18935ce346d9628dcd1670f98d8e238)
 
 ## v0.2.0 (2017-04-07)
 
