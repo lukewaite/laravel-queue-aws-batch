@@ -12,4 +12,6 @@ cache:
 
 install: travis_retry composer install
 
-script: vendor/bin/phpunit tests
+script:
+  - vendor/bin/phpunit
+  - php vendor/bin/ocular code-coverage:upload --format=php-clover tests/reports/clover.xml
