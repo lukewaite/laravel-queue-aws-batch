@@ -1,12 +1,12 @@
 # Release Notes for 0.x
 
-## [Unreleased]
+## v1.0.0 (2017-04-09)
 
 ### Added
-* Support for Laravel 5.2, and 5.3
+* Support for Laravel 5.2, and 5.3 ([#25](https://github.com/lukewaite/laravel-queue-aws-batch/pull/25))
 
 ### Fixed
-* Fix: Re-throw exception in command handler, don't explicitly `exit()`
+* Fix: Re-throw exception in command handler, don't explicitly `exit()` ([#5cc05a8](https://github.com/lukewaite/laravel-queue-aws-batch/commit/5cc05a88c497ade72b81916a16384bdb69107bd5))
 
 ## v0.2.1 (2017-04-07)
 
