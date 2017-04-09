@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+* Fix: Re-throw exception in command handler, don't explicitly `exit()`
+
 ## v0.2.1 (2017-04-07)
 
 ### Fixed
