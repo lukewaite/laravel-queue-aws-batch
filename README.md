@@ -5,7 +5,7 @@
 [![Build Status][ico-travis]][link-travis]
 [![Code Coverage][ico-coverage]][link-coverage]
 
-This package is currently built out for Laravel 5.1 as most of my work requires use of LTS builds. Support will be coming for 5.4.
+> The 1.0 version of this package supports Laravel 5.1, 5.2, and 5.3 only. Version 2.0 is needed for Laravel 5.4.
 
 ### Usage
 1. Your Laravel application will need to be dockerized and pushed into a container registry of your choice. The `ENTRYPOINT`
