@@ -71,7 +71,7 @@ will push your jobs into Batch. In this case, my queue name would be `first-run-
 }
 ```
 Here, you configure your container to start, run the `queue:work-batch` command (assuming `artisan` is your entrypoint)
-and pass in the name of the queue, `first-run-job-queue` as well as the `Ref::jobId`` param, which is passed in when
+and pass in the name of the queue, `first-run-job-queue` as well as the `Ref::jobId` param, which is passed in when
 the Batch connector creates the job.
 
 It is important that you configure a retryStrategy with more "attempts" than you are running `tries` if you provide that
@@ -83,11 +83,12 @@ this requirement can be relaxed later.
     * In `config/app.php` add to the `providers` array: `LukeWaite\LaravelQueueAwsBatch\BatchQueueServiceProvider::class`
     
     
-### Known Issues
-* `$delay` is not supported, for initial job sends or for retries. This is a limitation on the Batch side, and as it's
-our runner, and the DB queue is just backing it to ship the jobs more easily, we don't have an easy work around. If you
-require delayed jobs for your use case, at this point my recommendation would be to use a regular DB queue, and to fire
-a job into it which will fire your batch job at the correct time.
+### Limitations
+
+## Delayed Jobs
+AWS Batch has no method to delay a job and as it's our runner, we don't have an easy work around. If you require delayed
+jobs for your use case, at this point my recommendation would be to use a regular DB queue, and to fire a job into it
+which will fire your batch job at the correct time.
 
 [ico-version]: https://img.shields.io/packagist/v/lukewaite/laravel-queue-aws-batch.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
