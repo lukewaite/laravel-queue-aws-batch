@@ -19,12 +19,12 @@
     }
   },
   "require": {
-    "illuminate/support": ">5.1.0 <5.4",
+    "illuminate/support": ">5.4",
     "aws/aws-sdk-php": "^3.20.6"
   },
   "require-dev": {
     "mockery/mockery": "^0.9.6",
-    "laravel/framework": ">5.1.0 <5.4",
+    "laravel/framework": ">5.4",
     "phpunit/phpunit": "~4.8",
     "squizlabs/php_codesniffer": "^2.8",
     "scrutinizer/ocular": "^1.3"

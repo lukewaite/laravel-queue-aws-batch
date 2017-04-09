@@ -1,5 +1,11 @@
 # Release Notes for 0.x
 
+## [Unreleased]
+
+### Supported Version
+* Updated to support Laravel 5.4
+* Support for Laravel 5.1, 5.2, and 5.3 has been removed. See the [1.0](https://github.com/lukewaite/laravel-queue-aws-batch/tree/1.0) branch for those versions.
+
 ## v1.0.0 (2017-04-09)
 
 ### Added
