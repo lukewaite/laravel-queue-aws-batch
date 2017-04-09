@@ -1,4 +1,4 @@
-# Release Notes for 0.x
+# Release Notes for 1.x
 
 ## v1.0.0 (2017-04-09)
 
