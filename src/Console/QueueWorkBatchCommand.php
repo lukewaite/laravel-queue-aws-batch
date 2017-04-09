@@ -13,6 +13,7 @@ namespace LukeWaite\LaravelQueueAwsBatch\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Exceptions\Handler;
+use Illuminate\Queue\Console\WorkCommand;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Queue\Worker;
 use LukeWaite\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
@@ -20,7 +21,7 @@ use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 use LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 
-class QueueWorkBatchCommand extends Command
+class QueueWorkBatchCommand extends WorkCommand
 {
     protected $name = 'queue:work-batch';
 
@@ -29,15 +30,13 @@ class QueueWorkBatchCommand extends Command
     protected $signature = 'queue:work-batch {connection} {job_id} {--tries=}';
 
     protected $manager;
-    protected $worker;
     protected $exceptions;
 
     public function __construct(QueueManager $manager, Worker $worker, Handler $exceptions)
     {
-        $this->worker = $worker;
+        parent::__construct($worker);
         $this->manager = $manager;
         $this->exceptions = $exceptions;
-        parent::__construct();
     }
 
     public function fire()
@@ -53,11 +52,9 @@ class QueueWorkBatchCommand extends Command
         }
     }
 
+    // TOOD: Refactor out the logic here into an extension of the Worker class
     protected function runJob()
     {
-        $maxTries = $this->option('tries');
-        $delay = 0;
-
         $connectionName = $this->argument('connection');
         $jobId = $this->argument('job_id');
 
@@ -73,11 +70,10 @@ class QueueWorkBatchCommand extends Command
         // If we're able to pull a job off of the stack, we will process it and
         // then immediately return back out.
         if (!is_null($job)) {
-            return $this->worker->process(
+            $this->worker->process(
                 $this->manager->getName($connectionName),
                 $job,
-                $maxTries,
-                $delay
+                $this->gatherWorkerOptions()
             );
         }
 

@@ -5,7 +5,21 @@
 [![Build Status][ico-travis]][link-travis]
 [![Code Coverage][ico-coverage]][link-coverage]
 
-> The 1.0 version of this package supports Laravel 5.1, 5.2, and 5.3 only. Version 2.0 is needed for Laravel 5.4.
+### Supported Versions
+| Laravel Version | Package Tag | Supported |
+|-----------------|-------------|-----------|
+| 5.4.x | 2.0.x | yes |
+| 5.3.x | 1.0.x | yes |
+| 5.2.x | 1.0.x | yes |
+| 5.1.x | 1.0.x | yes |
+
+### Installation
+See the table above for package version information, and change the version below accordingly.
+
+Using `composer`, run:
+
+    composer require lukewaite/laravel-queue-aws-batch ~2.0
+
 
 ### Usage
 1. Your Laravel application will need to be dockerized and pushed into a container registry of your choice. The `ENTRYPOINT`

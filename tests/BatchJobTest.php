@@ -25,7 +25,8 @@ class BatchJobTest extends TestCase
             m::mock('Illuminate\Container\Container'),
             $this->batchQueue = m::mock('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue'),
             $this->job,
-            'default'
+            'testConnection',
+            'defaultQueue'
         ])->getMock();
     }
 

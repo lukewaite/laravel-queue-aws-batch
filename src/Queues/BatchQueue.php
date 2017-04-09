@@ -45,7 +45,7 @@ class BatchQueue extends DatabaseQueue
     public function push($job, $data = '', $queue = null)
     {
         $payload = $this->createPayload($job, $data);
-        return $this->pushToBatch($queue, $payload, $this->getDisplayName($job));
+        return $this->pushToBatch($queue, $payload, $this->getBatchDisplayName($job));
     }
 
     public function pushRaw($payload, $queue = null, array $options = [])
@@ -59,7 +59,7 @@ class BatchQueue extends DatabaseQueue
      * @param  mixed  $job
      * @return string
      */
-    protected function getDisplayName($job)
+    protected function getBatchDisplayName($job)
     {
         if (is_object($job)) {
             return method_exists($job, 'displayName')
@@ -80,7 +80,7 @@ class BatchQueue extends DatabaseQueue
      */
     protected function pushToBatch($queue, $payload, $jobName)
     {
-        $jobId = $this->pushToDatabase(0, $queue, $payload);
+        $jobId = $this->pushToDatabase($queue, $payload);
 
         $this->batch->submitJob([
             'jobDefinition' => $this->jobDefinition,
@@ -105,6 +105,7 @@ class BatchQueue extends DatabaseQueue
             $this->container,
             $this,
             $job,
+            $this->connectionName,
             $queue
         );
     }
