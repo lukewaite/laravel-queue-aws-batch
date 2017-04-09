@@ -1,13 +1,13 @@
 # Release Notes for 2.x
 
-## [Unreleased]
+## v2.0.0 (2017-04-09)
 
 ### Supported Version
-* Updated to support Laravel 5.4
-* Support for Laravel 5.1, 5.2, and 5.3 has been removed. See the [1.0](https://github.com/lukewaite/laravel-queue-aws-batch/tree/1.0) branch for those versions.
+* Updated to support Laravel 5.4 ([#26](https://github.com/lukewaite/laravel-queue-aws-batch/pull/26))
+* Support for Laravel 5.1, 5.2, and 5.3 has been removed. See the [1.0](https://github.com/lukewaite/laravel-queue-aws-batch/tree/1.0) branch for those versions. ([#26](https://github.com/lukewaite/laravel-queue-aws-batch/pull/26))
 
 ### Updated
-* Refactored to not override the base `Queue` class `getDisplayName` method
+* Refactored to not override the base `Queue` class `getDisplayName` method ([#26](https://github.com/lukewaite/laravel-queue-aws-batch/pull/26))
 
 ## v1.0.0 (2017-04-09)
 
