@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Added
+* Support for Laravel 5.2, and 5.3
+
 ### Fixed
 * Fix: Re-throw exception in command handler, don't explicitly `exit()`
 

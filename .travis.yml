@@ -6,11 +6,21 @@ php:
   - 7.0
   - 7.1
 
+env:
+  - laravel="~5.1.0"
+  - laravel="~5.2.0"
+  - laravel="~5.3.0"
+
+matrix:
+  exclude:
+    - php: 5.5
+      env: laravel="~5.3.0"
+
 cache:
   directories:
     - $HOME/.composer/cache
 
-install: travis_retry composer install
+install: travis_retry composer require laravel/framework $laravel
 
 script:
   - vendor/bin/phpunit
