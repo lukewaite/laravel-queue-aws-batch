@@ -80,7 +80,7 @@ class BatchQueue extends DatabaseQueue
      */
     protected function pushToBatch($queue, $payload, $jobName)
     {
-        $jobId = $this->pushToDatabase(0, $queue, $payload);
+        $jobId = $this->pushToDatabase($queue, $payload);
 
         $this->batch->submitJob([
             'jobDefinition' => $this->jobDefinition,
@@ -105,6 +105,7 @@ class BatchQueue extends DatabaseQueue
             $this->container,
             $this,
             $job,
+            $this->connectionName,
             $queue
         );
     }
