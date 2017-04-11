@@ -85,7 +85,7 @@ this requirement can be relaxed later.
     
 ### Limitations
 
-## Delayed Jobs
+#### Delayed Jobs
 AWS Batch has no method to delay a job and as it's our runner, we don't have an easy work around. If you require delayed
 jobs for your use case, at this point my recommendation would be to use a regular DB queue, and to fire a job into it
 which will fire your batch job at the correct time.
