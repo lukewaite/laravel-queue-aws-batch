@@ -16,6 +16,7 @@ use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Queue\Console\WorkCommand;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Queue\Worker;
+use Illuminate\Queue\WorkerOptions;
 use LukeWaite\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
 use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 use LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue;
@@ -27,7 +28,13 @@ class QueueWorkBatchCommand extends WorkCommand
 
     protected $description = 'Run a Job for the AWS Batch queue';
 
-    protected $signature = 'queue:work-batch {connection} {job_id} {--tries=}';
+    protected $signature = 'queue:work-batch
+                            {job_id : The job id in the database}
+                            {connection? : The name of the queue connection to work}
+                            {--memory=128 : The memory limit in megabytes}
+                            {--timeout=60 : The number of seconds a child process can run}
+                            {--tries=0 : Number of times to attempt a job before logging it failed}';
+
 
     protected $manager;
     protected $exceptions;
@@ -41,6 +48,8 @@ class QueueWorkBatchCommand extends WorkCommand
 
     public function fire()
     {
+        $this->listenForEvents();
+
         try {
             $this->runJob();
         } catch (\Exception $e) {
@@ -70,7 +79,7 @@ class QueueWorkBatchCommand extends WorkCommand
         // If we're able to pull a job off of the stack, we will process it and
         // then immediately return back out.
         if (!is_null($job)) {
-            $this->worker->process(
+            return $this->worker->process(
                 $this->manager->getName($connectionName),
                 $job,
                 $this->gatherWorkerOptions()
@@ -79,5 +88,19 @@ class QueueWorkBatchCommand extends WorkCommand
 
         // If we hit this point, we haven't processed our job
         throw new JobNotFoundException('No job was returned');
+    }
+
+    /**
+     * Gather all of the queue worker options as a single object.
+     *
+     * @return \Illuminate\Queue\WorkerOptions
+     */
+    protected function gatherWorkerOptions()
+    {
+        return new WorkerOptions(
+            0, $this->option('memory'),
+            $this->option('timeout'), 0,
+            $this->option('tries'), false
+        );
     }
 }

@@ -2,6 +2,7 @@
 
 namespace LukeWaite\LaravelQueueAwsBatch\Tests;
 
+use Carbon\Carbon;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
@@ -71,12 +72,26 @@ class BatchQueueTest extends TestCase
 
     public function testGetJobById()
     {
-        $this->database->shouldReceive('table')->once()->with('table')->andReturn($query = m::mock('StdClass'));
+        $testDate = Carbon::create(2016, 9, 4, 16);
+        Carbon::setTestNow($testDate);
+
+        $this->database->shouldReceive('beginTransaction')->once();
+        $this->database->shouldReceive('table')->with('table')->andReturn($table = m::mock('StdClass'));
+        $table->shouldReceive('lockForUpdate')->once()->andReturn($query = m::mock('StdClass'));
         $query->shouldReceive('where')->once()->with('id', 1)->andReturn($results = m::mock('StdClass'));
         $results->shouldReceive('first')->once()->andReturn($queryResult = m::mock('StdClass'));
         $queryResult->attempts = 0;
+        $queryResult->queue = 'default';
+        $queryResult->id = 1;
+
+        $table->shouldReceive('where')->once()->with('id', 1)->andReturn($reserved = m::mock('StdClass'));
+        $reserved->shouldReceive('update')->with(['reserved_at'=> 1473004800, 'attempts'=> 1])->once()->andReturn($job = m::mock('StdClass'));
+
+        $this->database->shouldReceive('commit')->once();
 
         $this->queue->getJobById(1, 'default');
+
+        Carbon::setTestNow();
     }
 
     public function testRelease()
@@ -85,7 +100,6 @@ class BatchQueueTest extends TestCase
         $table->shouldReceive('where')->once()->with('id', 4)->andReturn($query = m::mock('StdClass'));
         $query->shouldReceive('update')->once()->with([
             'attempts'    => 1,
-            'reserved'    => 0,
             'reserved_at' => null,
         ])->andReturn(4);
 
