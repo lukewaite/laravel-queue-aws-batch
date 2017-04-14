@@ -1,10 +1,10 @@
 # Release Notes for 2.x
 
-## [Unreleased]
+## v2.0.1 (2017-04-13)
 
 ### Fixed
-* Fix `queue-work:batch` command to run without error
-* Fix job failures and retries
+* Fix `queue-work:batch` command to run without error ([#28](https://github.com/lukewaite/laravel-queue-aws-batch/pull/28))
+* Fix job failures and retries ([#28](https://github.com/lukewaite/laravel-queue-aws-batch/pull/28))
 
 ## v2.0.0 (2017-04-09)
 
