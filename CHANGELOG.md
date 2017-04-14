@@ -1,5 +1,11 @@
 # Release Notes for 2.x
 
+## [Unreleased]
+
+### Fixed
+* Fix `queue-work:batch` command to run without error
+* Fix job failures and retries
+
 ## v2.0.0 (2017-04-09)
 
 ### Supported Version

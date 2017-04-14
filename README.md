@@ -59,7 +59,6 @@ will push your jobs into Batch. In this case, my queue name would be `first-run-
         "memory": 256,
         "command": [
             "queue:work-batch",
-            "first-run-job-queue",
             "Ref::jobId",
             "--tries=3"
         ],
