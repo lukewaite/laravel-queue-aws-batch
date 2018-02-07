@@ -53,6 +53,12 @@ class QueueWorkBatchCommand extends Command
         }
     }
 
+    /**
+     * @return array|null
+     * @throws JobNotFoundException
+     * @throws UnsupportedException
+     * @throws \Throwable
+     */
     protected function runJob()
     {
         $maxTries = $this->option('tries');
@@ -68,7 +74,7 @@ class QueueWorkBatchCommand extends Command
             throw new UnsupportedException('queue:work-batch can only be run on batch queues');
         }
 
-        $job = $connection->getJobById($jobId, $connectionName);
+        $job = $connection->getJobById($jobId);
 
         // If we're able to pull a job off of the stack, we will process it and
         // then immediately return back out.

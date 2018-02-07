@@ -75,8 +75,10 @@ class BatchQueueTest extends TestCase
         $query->shouldReceive('where')->once()->with('id', 1)->andReturn($results = m::mock('StdClass'));
         $results->shouldReceive('first')->once()->andReturn($queryResult = m::mock('StdClass'));
         $queryResult->attempts = 0;
+        $queryResult->queue = 'defaultQueue';
 
-        $this->queue->getJobById(1, 'default');
+        $job = $this->queue->getJobById(1, 'default');
+        $this->assertEquals('defaultQueue', $job->getQueue());
     }
 
     public function testRelease()
