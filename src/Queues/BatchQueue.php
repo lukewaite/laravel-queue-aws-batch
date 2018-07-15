@@ -94,7 +94,12 @@ class BatchQueue extends DatabaseQueue
         return $jobId;
     }
 
-    public function getJobById($id, $queue)
+    /**
+     * @param $id
+     * @return BatchJob
+     * @throws JobNotFoundException
+     */
+    public function getJobById($id)
     {
         $job = $this->database->table($this->table)->where('id', $id)->first();
         if (!isset($job)) {
@@ -105,7 +110,7 @@ class BatchQueue extends DatabaseQueue
             $this->container,
             $this,
             $job,
-            $queue
+            $job->queue
         );
     }
 
