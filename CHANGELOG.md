@@ -37,7 +37,7 @@ the queue name. ([#2aa745b](https://github.com/lukewaite/laravel-queue-aws-batch
 * More complete test coverage ([#18](https://github.com/lukewaite/laravel-queue-aws-batch/pull/18), [#19](https://github.com/lukewaite/laravel-queue-aws-batch/pull/19))
 
 [Unreleased]: https://github.com/lukewaite/logstash-input-cloudwatch-logs/compare/v1.0.2...HEAD
-[v1.0.1]: https://github.com/lukewaite/logstash-input-cloudwatch-logs/compare/v1.0.1...v1.0.2
+[v1.0.2]: https://github.com/lukewaite/logstash-input-cloudwatch-logs/compare/v1.0.1...v1.0.2
 [v1.0.1]: https://github.com/lukewaite/logstash-input-cloudwatch-logs/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/lukewaite/logstash-input-cloudwatch-logs/compare/v0.2.1...v1.0.0
 [v0.2.1]: https://github.com/lukewaite/logstash-input-cloudwatch-logs/compare/v0.2.0...v0.2.1
