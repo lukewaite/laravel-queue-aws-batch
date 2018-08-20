@@ -41,7 +41,8 @@ the queue name. ([#2aa745b](https://github.com/lukewaite/laravel-queue-aws-batch
   * `BatchJob::release()` [Diff](https://github.com/lukewaite/laravel-queue-aws-batch/pull/19/files#diff-fb4479932d3da5ac0014681d4beba72cR38)
 * More complete test coverage ([#18](https://github.com/lukewaite/laravel-queue-aws-batch/pull/18), [#19](https://github.com/lukewaite/laravel-queue-aws-batch/pull/19))
 
-[Unreleased]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.1.0...HEAD
+[v1.1.0]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.0.2...v1.1.0
 [v1.0.2]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.0.1...v1.0.2
 [v1.0.1]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.0.0...v1.0.1
 [v1.0.0]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v0.2.1...v1.0.0
