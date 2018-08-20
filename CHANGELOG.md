@@ -1,5 +1,10 @@
 # Release Notes for 1.x
 
+## [v1.1.0] (2018-08-20)
+
+### Added
+* Added support for containerOverrides ([#11c0184](https://github.com/lukewaite/laravel-queue-aws-batch/pull/30))
+
 ## [v1.0.2] (2018-07-20)
 
 ### Fixed
