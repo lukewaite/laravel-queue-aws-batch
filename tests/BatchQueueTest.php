@@ -2,6 +2,7 @@
 
 namespace LukeWaite\LaravelQueueAwsBatch\Tests;
 
+use LukeWaite\LaravelQueueAwsBatch\Contracts\JobContainerOverrides;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
@@ -51,6 +52,21 @@ class BatchQueueTest extends TestCase
 
         $result = $this->queue->push('foo', ['data']);
         $this->assertEquals(100, $result);
+    }
+
+    public function testPushProperlySetsContainerOverrides()
+    {
+        $this->database->shouldReceive('table')->with('table')->andReturn($query = m::mock('StdClass'));
+
+        $query->shouldReceive('insertGetId')->once()->andReturnUsing(function ($array) {
+            return 100;
+        });
+
+        $this->batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
+            $this->assertEquals([ 'memory' => 2048, 'vcpus' => 2 ], $array['containerOverrides']);
+        });
+
+        $this->queue->push(new TestJobWithOverrides());
     }
 
     public function testPushProperlySanitizesJobName()
@@ -133,4 +149,15 @@ class BatchQueueTest extends TestCase
 class TestJob
 {
     //
+}
+
+class TestJobWithOverrides implements JobContainerOverrides
+{
+    public function getBatchContainerOverrides()
+    {
+        return [
+            'memory' => 2048,
+            'vcpus' => 2
+        ];
+    }
 }
