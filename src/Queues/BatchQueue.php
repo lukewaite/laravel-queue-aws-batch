@@ -14,6 +14,7 @@ namespace LukeWaite\LaravelQueueAwsBatch\Queues;
 use Aws\Batch\BatchClient;
 use Illuminate\Database\Connection;
 use Illuminate\Queue\DatabaseQueue;
+use LukeWaite\LaravelQueueAwsBatch\Contracts\JobContainerOverrides;
 use LukeWaite\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
 use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 use LukeWaite\LaravelQueueAwsBatch\Jobs\BatchJob;
@@ -45,7 +46,7 @@ class BatchQueue extends DatabaseQueue
     public function push($job, $data = '', $queue = null)
     {
         $payload = $this->createPayload($job, $data);
-        return $this->pushToBatch($queue, $payload, $this->getDisplayName($job));
+        return $this->pushToBatch($queue, $payload, $this->getDisplayName($job), $job);
     }
 
     public function pushRaw($payload, $queue = null, array $options = [])
@@ -56,7 +57,7 @@ class BatchQueue extends DatabaseQueue
     /**
      * Get the display name for the given job.
      *
-     * @param  mixed  $job
+     * @param  mixed $job
      * @return string
      */
     protected function getDisplayName($job)
@@ -73,25 +74,38 @@ class BatchQueue extends DatabaseQueue
      * Push a raw payload to the database, then to AWS Batch, with a given delay.
      *
      * @param string|null $queue
-     * @param string      $payload
-     * @param string      $jobName
+     * @param string $payload
+     * @param string $jobName
      *
      * @return int
      */
-    protected function pushToBatch($queue, $payload, $jobName)
+    protected function pushToBatch($queue, $payload, $jobName, $job = null)
     {
         $jobId = $this->pushToDatabase(0, $queue, $payload);
 
+        $containerOverrides = [];
+
+        if (isset($job) && is_object($job) && $this->implementsJobContainerOverrides($job)) {
+            /** @var JobContainerOverrides $job */
+            $containerOverrides = $job->getBatchContainerOverrides();
+        }
+
         $this->batch->submitJob([
             'jobDefinition' => $this->jobDefinition,
-            'jobName'       => $jobName,
-            'jobQueue'      => $this->getQueue($queue),
-            'parameters'    => [
+            'jobName' => $jobName,
+            'jobQueue' => $this->getQueue($queue),
+            'parameters' => [
                 'jobId' => $jobId,
-            ]
+            ],
+            'containerOverrides' => $containerOverrides
         ]);
 
         return $jobId;
+    }
+
+    private function implementsJobContainerOverrides($job)
+    {
+        return $job instanceof JobContainerOverrides;
     }
 
     /**
@@ -131,8 +145,8 @@ class BatchQueue extends DatabaseQueue
         }
 
         return $this->database->table($this->table)->where('id', $job->id)->update([
-            'attempts'    => $job->attempts,
-            'reserved'    => 0,
+            'attempts' => $job->attempts,
+            'reserved' => 0,
             'reserved_at' => null
         ]);
     }
