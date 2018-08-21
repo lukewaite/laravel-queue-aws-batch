@@ -83,22 +83,25 @@ class BatchQueue extends DatabaseQueue
     {
         $jobId = $this->pushToDatabase(0, $queue, $payload);
 
-        $containerOverrides = [];
-
-        if (isset($job) && is_object($job) && $this->implementsJobContainerOverrides($job)) {
-            /** @var JobContainerOverrides $job */
-            $containerOverrides = $job->getBatchContainerOverrides();
-        }
-
-        $this->batch->submitJob([
+        $payload = [
             'jobDefinition' => $this->jobDefinition,
             'jobName' => $jobName,
             'jobQueue' => $this->getQueue($queue),
             'parameters' => [
                 'jobId' => $jobId,
-            ],
-            'containerOverrides' => $containerOverrides
-        ]);
+            ]
+        ];
+
+        if (isset($job) && is_object($job) && $this->implementsJobContainerOverrides($job)) {
+            /** @var JobContainerOverrides $job */
+            $overrides = $job->getBatchContainerOverrides();
+
+            if (isset($overrides)) {
+                $payload['containerOverrides'] = $overrides;
+            }
+        }
+
+        $this->batch->submitJob($payload);
 
         return $jobId;
     }

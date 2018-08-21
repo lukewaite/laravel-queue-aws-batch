@@ -14,6 +14,9 @@ namespace LukeWaite\LaravelQueueAwsBatch\Contracts;
 /**
  * Should return an array representing the contents of the containerOverrides
  * property documented in the AWS Batch SubmitJob API reference.
+ *
+ * In the event of no overrides, should return null.
+ *
  * https://docs.aws.amazon.com/batch/latest/APIReference/API_SubmitJob.html
  *
  * [
