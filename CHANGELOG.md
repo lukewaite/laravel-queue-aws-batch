@@ -1,5 +1,10 @@
 # Release Notes for 1.x
 
+## [v1.1.1] (2018-08-21)
+
+### Fixed
+* Fix non-overridden jobs by not setting the containerOverrides key when not provided
+
 ## [v1.1.0] (2018-08-20)
 
 ### Added
@@ -41,7 +46,8 @@ the queue name. ([#2aa745b](https://github.com/lukewaite/laravel-queue-aws-batch
   * `BatchJob::release()` [Diff](https://github.com/lukewaite/laravel-queue-aws-batch/pull/19/files#diff-fb4479932d3da5ac0014681d4beba72cR38)
 * More complete test coverage ([#18](https://github.com/lukewaite/laravel-queue-aws-batch/pull/18), [#19](https://github.com/lukewaite/laravel-queue-aws-batch/pull/19))
 
-[Unreleased]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.1.1...HEAD
+[v1.1.1]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.0.2...v1.1.0
 [v1.0.2]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.0.1...v1.0.2
 [v1.0.1]: https://github.com/lukewaite/laravel-queue-aws-batch/compare/v1.0.0...v1.0.1
