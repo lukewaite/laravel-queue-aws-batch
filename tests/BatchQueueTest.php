@@ -69,6 +69,51 @@ class BatchQueueTest extends TestCase
         $this->queue->push(new TestJobWithOverrides());
     }
 
+    public function testPushNoOverridesSetOnNullOverrides()
+    {
+        $this->database->shouldReceive('table')->with('table')->andReturn($query = m::mock('StdClass'));
+
+        $query->shouldReceive('insertGetId')->once()->andReturnUsing(function ($array) {
+            return 100;
+        });
+
+        $this->batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
+            $this->assertArrayNotHasKey('containerOverrides', $array);
+        });
+
+        $this->queue->push(new TestJobWithNullOverrides());
+    }
+
+    public function testPushNoOverridesSetOnClassWithoutInterface()
+    {
+        $this->database->shouldReceive('table')->with('table')->andReturn($query = m::mock('StdClass'));
+
+        $query->shouldReceive('insertGetId')->once()->andReturnUsing(function ($array) {
+            return 100;
+        });
+
+        $this->batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
+            $this->assertArrayNotHasKey('containerOverrides', $array);
+        });
+
+        $this->queue->push(new TestJob());
+    }
+
+    public function testPushNoOverridesSetOnNonObjectPayload()
+    {
+        $this->database->shouldReceive('table')->with('table')->andReturn($query = m::mock('StdClass'));
+
+        $query->shouldReceive('insertGetId')->once()->andReturnUsing(function ($array) {
+            return 100;
+        });
+
+        $this->batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
+            $this->assertArrayNotHasKey('containerOverrides', $array);
+        });
+
+        $this->queue->push('foo', ['data']);
+    }
+
     public function testPushProperlySanitizesJobName()
     {
         $this->database->shouldReceive('table')->with('table')->andReturn($query = m::mock('StdClass'));
@@ -159,5 +204,13 @@ class TestJobWithOverrides implements JobContainerOverrides
             'memory' => 2048,
             'vcpus' => 2
         ];
+    }
+}
+
+class TestJobWithNullOverrides implements JobContainerOverrides
+{
+    public function getBatchContainerOverrides()
+    {
+        return null;
     }
 }
