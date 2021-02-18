@@ -1,9 +1,9 @@
 <?php
 
-namespace LukeWaite\LaravelQueueAwsBatch\Tests;
+namespace DNXLabs\LaravelQueueAwsBatch\Tests;
 
 use Carbon\Carbon;
-use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
+use DNXLabs\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
@@ -16,7 +16,7 @@ class BatchQueueTest extends TestCase
 
     public function setUp(): void
     {
-        $this->queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
+        $this->queue = $this->getMockBuilder('DNXLabs\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
             $this->database = m::mock('Illuminate\Database\Connection'),
             'table',
             'default',
@@ -65,7 +65,7 @@ class BatchQueueTest extends TestCase
 
         $this->batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
             $this->assertRegExp('/^[a-zA-Z0-9_]+$/', $array['jobName']);
-            $this->assertEquals('LukeWaite_LaravelQueueAwsBatch_Tests_TestJob', $array['jobName']);
+            $this->assertEquals('DNXLabs_LaravelQueueAwsBatch_Tests_TestJob', $array['jobName']);
         });
 
         $this->queue->push(new TestJob());

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  app:
+    image: viblo/php:7.2-caddy
+    container_name: laravel-queue-aws-batch
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "80:80"

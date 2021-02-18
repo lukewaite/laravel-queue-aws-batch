@@ -6,12 +6,11 @@
  * @copyright 2017 Luke Waite
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  *
- * @link      https://github.com/lukewaite/laravel-queue-aws-batch
+ * @link      https://github.com/dnxlabs/laravel-queue-aws-batch
  */
 
-namespace LukeWaite\LaravelQueueAwsBatch\Console;
+namespace DNXLabs\LaravelQueueAwsBatch\Console;
 
-use Illuminate\Console\Command;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Foundation\Exceptions\Handler;
@@ -19,9 +18,9 @@ use Illuminate\Queue\Console\WorkCommand;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Queue\Worker;
 use Illuminate\Queue\WorkerOptions;
-use LukeWaite\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
-use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
-use LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue;
+use DNXLabs\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
+use DNXLabs\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
+use DNXLabs\LaravelQueueAwsBatch\Queues\BatchQueue;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class QueueWorkBatchCommand extends WorkCommand

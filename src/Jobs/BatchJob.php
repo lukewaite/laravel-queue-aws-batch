@@ -6,20 +6,20 @@
  * @copyright 2017 Luke Waite
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  *
- * @link      https://github.com/lukewaite/laravel-queue-aws-batch
+ * @link      https://github.com/dnxlabs/laravel-queue-aws-batch
  */
 
-namespace LukeWaite\LaravelQueueAwsBatch\Jobs;
+namespace DNXLabs\LaravelQueueAwsBatch\Jobs;
 
 use Illuminate\Queue\Jobs\DatabaseJob;
-use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
+use DNXLabs\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 
 class BatchJob extends DatabaseJob
 {
     /**
      * The database queue instance.
      *
-     * @var \LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue
+     * @var \DNXLabs\LaravelQueueAwsBatch\Queues\BatchQueue
      */
     protected $database;
 
