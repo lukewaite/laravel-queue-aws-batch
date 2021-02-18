@@ -8,6 +8,7 @@
 ### Supported Versions
 | Laravel Version | Package Tag | Supported |
 |-----------------|-------------|-----------|
+| 6.0.x | 3.0.x | yes |
 | 5.4.x | 2.0.x | yes |
 | 5.3.x | 1.0.x | yes |
 | 5.2.x | 1.0.x | yes |
@@ -16,9 +17,17 @@
 ### Installation
 See the table above for package version information, and change the version below accordingly.
 
+Add custom repository to your composer json:
+```
+{
+    "type": "vcs",
+    "url": "https://github.com/antoniofigueiredotamura/laravel-queue-aws-batch"
+}
+```
+
 Using `composer`, run:
 
-    composer require lukewaite/laravel-queue-aws-batch ~2.0
+    composer require antoniofigueiredotamura/laravel-queue-aws-batch ~3.0
 
 
 ### Usage

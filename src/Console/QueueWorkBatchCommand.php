@@ -12,6 +12,8 @@
 namespace LukeWaite\LaravelQueueAwsBatch\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Queue\Console\WorkCommand;
 use Illuminate\Queue\QueueManager;
@@ -41,7 +43,7 @@ class QueueWorkBatchCommand extends WorkCommand
 
     public function __construct(QueueManager $manager, Worker $worker, Handler $exceptions)
     {
-        parent::__construct($worker);
+        parent::__construct($worker, Container::getInstance()->make(Repository::class));
         $this->manager = $manager;
         $this->exceptions = $exceptions;
     }
@@ -98,9 +100,12 @@ class QueueWorkBatchCommand extends WorkCommand
     protected function gatherWorkerOptions()
     {
         return new WorkerOptions(
-            0, $this->option('memory'),
-            $this->option('timeout'), 0,
-            $this->option('tries'), false
+            0,
+            $this->option('memory'),
+            $this->option('timeout'),
+            0,
+            $this->option('tries'),
+            false
         );
     }
 }

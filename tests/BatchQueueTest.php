@@ -3,17 +3,18 @@
 namespace LukeWaite\LaravelQueueAwsBatch\Tests;
 
 use Carbon\Carbon;
+use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
 class BatchQueueTest extends TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         m::close();
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
             $this->database = m::mock('Illuminate\Database\Connection'),
@@ -38,7 +39,7 @@ class BatchQueueTest extends TestCase
             $this->assertEquals('foo', json_decode($array['payload'], 1)['job']);
             $this->assertEquals(0, $array['attempts']);
             $this->assertNull($array['reserved_at']);
-            $this->assertInternalType('int', $array['available_at']);
+            $this->assertIsInt($array['available_at']);
 
             return 100;
         });
@@ -113,25 +114,21 @@ class BatchQueueTest extends TestCase
         $this->assertEquals(4, $result);
     }
 
-    /**
-     * @expectedException \LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
-     */
     public function testPopThrowsException()
     {
+        $this->expectException(UnsupportedException::class);
         $this->queue->pop('default');
     }
 
-    /**
-     * @expectedException \LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
-     */
     public function testLaterThrowsException()
     {
+        $this->expectException(UnsupportedException::class);
         $this->queue->later(10, 'default');
     }
 
-    /** @expectedException \LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException */
     public function testReleaseWithDelayThrowsException()
     {
+        $this->expectException(UnsupportedException::class);
         $job = new \stdClass();
         $job->payload = '{"job":"foo","data":["data"]}';
         $job->id = 4;

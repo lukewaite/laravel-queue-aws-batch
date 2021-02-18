@@ -45,7 +45,8 @@ class BatchQueue extends DatabaseQueue
 
     public function push($job, $data = '', $queue = null)
     {
-        $payload = $this->createPayload($job, $data);
+        $queue = $this->getQueue($queue);
+        $payload = $this->createPayload($job, $queue, $data);
         return $this->pushToBatch($queue, $payload, $this->getBatchDisplayName($job));
     }
 
