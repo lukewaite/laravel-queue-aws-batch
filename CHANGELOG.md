@@ -1,5 +1,10 @@
 # Release Notes for 2.x
 
+## v3.0.0 (2021-02-18)
+
+### Added
+* Support for Laravel 6.x ([#21](https://github.com/dnxlabs/laravel-queue-aws-batch/pull/1))
+
 ## v2.0.1 (2017-04-13)
 
 ### Fixed
