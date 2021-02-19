@@ -152,11 +152,14 @@ class BatchQueue extends DatabaseQueue
         ]);
     }
 
-    public function pop($queue = null)
-    {
-        throw new UnsupportedException('The BatchQueue does not support running via a regular worker. ' .
-            'Instead, you should use the queue:batch-work command with a job id.');
-    }
+    /*
+     * Function pop() from parent class need to be executed on Laravel 6.x
+     */
+    // public function pop($queue = null)
+    // {
+    //     throw new UnsupportedException('The BatchQueue does not support running via a regular worker. ' .
+    //         'Instead, you should use the queue:batch-work command with a job id.');
+    // }
 
     public function bulk($jobs, $data = '', $queue = null)
     {
