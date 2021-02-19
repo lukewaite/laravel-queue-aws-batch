@@ -34,7 +34,11 @@ class QueueWorkBatchCommand extends WorkCommand
                             {connection? : The name of the queue connection to work}
                             {--memory=128 : The memory limit in megabytes}
                             {--timeout=60 : The number of seconds a child process can run}
-                            {--tries=0 : Number of times to attempt a job before logging it failed}';
+                            {--tries=0 : Number of times to attempt a job before logging it failed}
+                            {--force : Force the worker to run even in maintenance mode}
+                            {--queue= : The names of the queues to work}
+                            {--once : Only process the next job on the queue}
+                            {--stop-when-empty : Stop when the queue is empty}';
 
 
     protected $manager;
