@@ -114,11 +114,11 @@ class BatchQueueTest extends TestCase
         $this->assertEquals(4, $result);
     }
 
-    public function testPopThrowsException()
-    {
-        $this->expectException(UnsupportedException::class);
-        $this->queue->pop('default');
-    }
+    // public function testPopThrowsException()
+    // {
+    //     $this->expectException(UnsupportedException::class);
+    //     $this->queue->pop('default');
+    // }
 
     public function testLaterThrowsException()
     {
