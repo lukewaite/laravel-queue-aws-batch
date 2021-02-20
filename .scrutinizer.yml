@@ -27,9 +27,6 @@ build:
             - vendor        # Cache for already installed composer package -> speed up composer install
             - bin           # As vendor directory is cached, bin directory must be also cached (as some dependency will not installed if they are already present and so, related binary will not be linked)
             - ~/.composer   # Composer home directory (avoid fetching already fetched packages)
-    dependencies:
-        override:
-            - composer run-script build-scrutinizer # will launch "composer install" but for CI (no loader optimization compared to the build command for production for instance)
 
     tests:
         override:
