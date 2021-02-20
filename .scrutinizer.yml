@@ -29,10 +29,10 @@ build:
             tests:
                 override:
                 - 
-                    command: ./vendor/bin/phpunit --coverage-clover=tests/coverage/clover
+                    command: ./vendor/bin/phpunit --coverage-clover=tests/reports/clover.xml
                     idle_timeout: 1200
                     coverage:
-                        file: 'tests/coverage/clover.xml'
+                        file: 'tests/reports/clover.xml'
                         format: 'php-clover'
                     command: php vendor/bin/ocular code-coverage:upload --format=php-clover tests/reports/clover.xml
 
