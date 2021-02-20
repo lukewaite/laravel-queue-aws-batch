@@ -2,6 +2,7 @@ checks:
     php:
         code_rating: true
         duplication: true
+        code_coverage: true
 
 build_failure_conditions:
     - 'project.metric_change("scrutinizer.quality", < -0.10)'
