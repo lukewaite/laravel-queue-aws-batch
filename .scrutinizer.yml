@@ -2,7 +2,6 @@ checks:
     php:
         code_rating: true
         duplication: true
-        code_coverage: true
 
 build_failure_conditions:
     - 'project.metric_change("scrutinizer.quality", < -0.10)'
@@ -32,11 +31,12 @@ build:
     tests:
         override:
             -
-                command: composer run-script codestyle        # Or "./vendor/bin/phpcs". Anyway do not use the scrutinizer command "phpcs-run" as if some cs error are found this command is not considered as failed command
-                command: composer run-script coverage-clover  # Or "./vendor/bin/phpunit --coverage-clover=build/coverage/clover.xml"
+                command: composer run-script codestyle
+                command: ./vendor/bin/phpunit --coverage-clover=tests/coverage/clover
+                command: php vendor/bin/ocular code-coverage:upload --format=php-clover tests/reports/clover.xml
                 idle_timeout: 1200
                 coverage:
-                    file: 'tests/reports/clover.xml'
+                    file: 'tests/coverage/clover.xml'
                     format: 'php-clover'
 
 tools:
