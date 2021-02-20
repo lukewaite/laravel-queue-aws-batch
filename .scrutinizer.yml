@@ -35,7 +35,7 @@ build:
                 command: composer run-script coverage-clover  # Or "./vendor/bin/phpunit --coverage-clover=build/coverage/clover.xml"
                 idle_timeout: 1200
                 coverage:
-                    file: 'build/coverage/clover.xml'
+                    file: 'tests/reports/clover.xml'
                     format: 'php-clover'
 
 tools:
@@ -55,8 +55,8 @@ tools:
                 enabled: false
             simplify_boolean_return:
                 enabled: true
-    external_code_coverage: true
-    php_code_coverage: false
+    external_code_coverage: false
+    php_code_coverage: true
     php_changetracking: true
     php_cpd: true
     php_cs_fixer: false
