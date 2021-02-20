@@ -17,6 +17,11 @@ build_failure_conditions:
     - 'patches.label("Spacing").exists'                             # No spacing patches allowed
 
 build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
     cache:
         directories:
             - vendor        # Cache for already installed composer package -> speed up composer install
