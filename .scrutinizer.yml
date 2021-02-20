@@ -16,19 +16,6 @@ build_failure_conditions:
     - 'patches.label("Doc Comments").exists'                        # No doc comments patches allowed
     - 'patches.label("Spacing").exists'                             # No spacing patches allowed
 
-
-build:
-  nodes:
-    coverage:
-      tests:
-        override:
-          - command: ./my-test-run
-            coverage:
-              file: path/to/coverage-data
-
-              # These formats are supported:
-              # clover, cobertura, jacoco, python-cc, ruby-cc, go-cc, lcov
-              format: name-of-format
 build:
     nodes:
         analysis:
@@ -46,7 +33,7 @@ build:
                     idle_timeout: 1200
                     coverage:
                         file: 'tests/coverage/clover.xml'
-                        format: 'clover'
+                        format: 'php-clover'
                     command: php vendor/bin/ocular code-coverage:upload --format=php-clover tests/reports/clover.xml
 
     cache:
