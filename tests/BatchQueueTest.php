@@ -73,6 +73,7 @@ class BatchQueueTest extends TestCase
 
     public function testGetJobById()
     {
+        $this->expectNotToPerformAssertions();
         $testDate = Carbon::create(2016, 9, 4, 16);
         Carbon::setTestNow($testDate);
 

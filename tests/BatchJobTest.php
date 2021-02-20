@@ -33,6 +33,7 @@ class BatchJobTest extends TestCase
 
     public function testReleaseDoesntDeleteButDoesUpdate()
     {
+        $this->expectNotToPerformAssertions();
         $this->batchQueue->shouldReceive('release')->once();
         $this->batchQueue->shouldNotReceive('deleteReserved');
 
