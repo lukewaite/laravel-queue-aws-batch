@@ -55,8 +55,8 @@ tools:
                 enabled: false
             simplify_boolean_return:
                 enabled: true
-    external_code_coverage: false
-    php_code_coverage: true
+    external_code_coverage: true
+    php_code_coverage: false
     php_changetracking: true
     php_cpd: true
     php_cs_fixer: false
