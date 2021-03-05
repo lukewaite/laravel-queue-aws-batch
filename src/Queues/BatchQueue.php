@@ -6,18 +6,18 @@
  * @copyright 2017 Luke Waite
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  *
- * @link      https://github.com/lukewaite/laravel-queue-aws-batch
+ * @link      https://github.com/dnxlabs/laravel-queue-aws-batch
  */
 
-namespace LukeWaite\LaravelQueueAwsBatch\Queues;
+namespace DNXLabs\LaravelQueueAwsBatch\Queues;
 
 use Aws\Batch\BatchClient;
 use Illuminate\Database\Connection;
 use Illuminate\Queue\DatabaseQueue;
 use Illuminate\Queue\Jobs\DatabaseJobRecord;
-use LukeWaite\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
-use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
-use LukeWaite\LaravelQueueAwsBatch\Jobs\BatchJob;
+use DNXLabs\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
+use DNXLabs\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
+use DNXLabs\LaravelQueueAwsBatch\Jobs\BatchJob;
 
 class BatchQueue extends DatabaseQueue
 {
@@ -45,7 +45,8 @@ class BatchQueue extends DatabaseQueue
 
     public function push($job, $data = '', $queue = null)
     {
-        $payload = $this->createPayload($job, $data);
+        $queue = $this->getQueue($queue);
+        $payload = $this->createPayload($job, $queue, $data);
         return $this->pushToBatch($queue, $payload, $this->getBatchDisplayName($job));
     }
 
@@ -64,7 +65,7 @@ class BatchQueue extends DatabaseQueue
     {
         if (is_object($job)) {
             return method_exists($job, 'displayName')
-                ? $job->displayName() : str_replace('\\', '_', (string)get_class($job));
+                ? $job->displayName() : str_replace('\\', '_', (string) get_class($job));
         } else {
             return is_string($job) ? explode('@', $job)[0] : null;
         }
@@ -151,11 +152,14 @@ class BatchQueue extends DatabaseQueue
         ]);
     }
 
-    public function pop($queue = null)
-    {
-        throw new UnsupportedException('The BatchQueue does not support running via a regular worker. ' .
-            'Instead, you should use the queue:batch-work command with a job id.');
-    }
+    /*
+     * Function pop() from parent class need to be executed on Laravel 6.x
+     */
+    // public function pop($queue = null)
+    // {
+    //     throw new UnsupportedException('The BatchQueue does not support running via a regular worker. ' .
+    //         'Instead, you should use the queue:batch-work command with a job id.');
+    // }
 
     public function bulk($jobs, $data = '', $queue = null)
     {

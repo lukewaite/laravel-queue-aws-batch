@@ -1,23 +1,81 @@
-filter:
-    excluded_paths: [tests/*]
-
 checks:
     php:
-        remove_extra_empty_lines: true
-        remove_php_closing_tag: true
-        remove_trailing_whitespace: true
-        fix_use_statements:
-            remove_unused: true
-            preserve_multiple: false
-            preserve_blanklines: true
-            order_alphabetically: true
-        fix_php_opening_tag: true
-        fix_linefeed: true
-        fix_line_ending: true
-        fix_identation_4spaces: true
-        fix_doc_comments: true
+        code_rating: true
+        duplication: true
 
+build_failure_conditions:
+    - 'project.metric_change("scrutinizer.quality", < -0.10)'
+    - 'elements.rating(<= D).exists'                                # No classes/methods with a rating of D or worse
+    - 'elements.rating(<= D).new.exists'                            # No new classes/methods with a rating of D or worse allowed
+    - 'issues.label("coding-style").exists'                         # No coding style issues allowed
+    - 'issues.label("coding-style").new.exists'                     # No new coding style issues allowed
+    - 'issues.severity(>= MAJOR).new.exists'                        # New issues of major or higher severity
+    - 'issues.severity(>= MAJOR).exists'                            # New major or higher severity issues
+    - 'project.metric("scrutinizer.quality", < 9)'                  # Code Quality Rating drops below 9
+    - 'project.metric_change("scrutinizer.test_coverage", < -0.1)'  # Code Coverage decreased from previous inspection by more than 10%
+    - 'patches.label("Doc Comments").exists'                        # No doc comments patches allowed
+    - 'patches.label("Spacing").exists'                             # No spacing patches allowed
+
+build:
+    nodes:
+        analysis:
+            tests:
+                override:
+                - 
+                    command: php-scrutinizer-run
+                    command: composer run-script codestyle
+
+        coverage:
+            tests:
+                override:
+                - 
+                    command: ./vendor/bin/phpunit --coverage-clover=tests/reports/clover.xml
+                    idle_timeout: 1200
+                    coverage:
+                        file: 'tests/reports/clover.xml'
+                        format: 'php-clover'
+                    command: php vendor/bin/ocular code-coverage:upload --format=php-clover tests/reports/clover.xml
+
+    cache:
+        directories:
+            - vendor        # Cache for already installed composer package -> speed up composer install
+            - ~/.composer   # Composer home directory (avoid fetching already fetched packages)
+
+                
 tools:
-    external_code_coverage:
-        timeout: 600
-        runs: 3
+    php_analyzer:
+        enabled: true
+        config:
+            checkstyle:
+                enabled: true
+                naming:
+                    isser_method_name: ^.*$
+                    utility_class_name: ^.*$
+            doc_comment_fixes:
+                enabled: false
+            reflection_fixes:
+                enabled: false
+            use_statement_fixes:
+                enabled: false
+            simplify_boolean_return:
+                enabled: true
+    external_code_coverage: false
+    php_code_coverage: true
+    php_changetracking: true
+    php_cpd: true
+    php_cs_fixer: false
+    php_mess_detector: true
+    php_pdepend: true
+    sensiolabs_security_checker: true
+
+filter:
+    paths:
+        - src/*
+
+coding_style:
+    php:
+        spaces:
+            before_parentheses:
+                closure_definition: true
+            around_operators:
+                concatenation: false

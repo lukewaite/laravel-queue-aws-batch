@@ -8,17 +8,27 @@
 ### Supported Versions
 | Laravel Version | Package Tag | Supported |
 |-----------------|-------------|-----------|
-| 5.4.x | 2.0.x | yes |
-| 5.3.x | 1.0.x | yes |
-| 5.2.x | 1.0.x | yes |
-| 5.1.x | 1.0.x | yes |
+| 6.0.x | 3.0.x | yes |
 
 ### Installation
 See the table above for package version information, and change the version below accordingly.
 
+Add custom repository to your composer json:
+```
+    "require": {
+        "dnxlabs/laravel-queue-aws-batch": "~3.0.0"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@github.com:dnxlabs/laravel-queue-aws-batch.git"
+        }
+    ]
+```
+
 Using `composer`, run:
 
-    composer require lukewaite/laravel-queue-aws-batch ~2.0
+    composer require dnxlabs/laravel-queue-aws-batch ~3.0
 
 
 ### Usage
@@ -79,7 +89,7 @@ the _next_ run after tries has been exceeded by jobs failing. Newer versions wil
 this requirement can be relaxed later.
 
 6. Add the Service Provider to your application:
-    * In `config/app.php` add to the `providers` array: `LukeWaite\LaravelQueueAwsBatch\BatchQueueServiceProvider::class`
+    * In `config/app.php` add to the `providers` array: `DNXLabs\LaravelQueueAwsBatch\BatchQueueServiceProvider::class`
     
     
 ### Limitations
@@ -89,11 +99,11 @@ AWS Batch has no method to delay a job and as it's our runner, we don't have an 
 jobs for your use case, at this point my recommendation would be to use a regular DB queue, and to fire a job into it
 which will fire your batch job at the correct time.
 
-[ico-version]: https://img.shields.io/packagist/v/lukewaite/laravel-queue-aws-batch.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/dnxlabs/laravel-queue-aws-batch.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/lukewaite/laravel-queue-aws-batch/master.svg?style=flat-square
-[ico-coverage]: https://img.shields.io/scrutinizer/coverage/g/lukewaite/laravel-queue-aws-batch/master.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/dnxlabs/laravel-queue-aws-batch/master.svg?style=flat-square
+[ico-coverage]: https://img.shields.io/scrutinizer/coverage/g/dnxlabs/laravel-queue-aws-batch/master.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/lukewaite/laravel-queue-aws-batch
-[link-travis]: https://travis-ci.org/lukewaite/laravel-queue-aws-batch
-[link-coverage]: https://scrutinizer-ci.com/g/lukewaite/laravel-queue-aws-batch/?branch=master
+[link-packagist]: https://packagist.org/packages/dnxlabs/laravel-queue-aws-batch
+[link-travis]: https://travis-ci.org/dnxlabs/laravel-queue-aws-batch
+[link-coverage]: https://scrutinizer-ci.com/g/dnxlabs/laravel-queue-aws-batch/?branch=master

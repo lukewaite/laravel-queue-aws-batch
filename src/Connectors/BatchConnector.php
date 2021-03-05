@@ -6,15 +6,15 @@
  * @copyright 2017 Luke Waite
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  *
- * @link      https://github.com/lukewaite/laravel-queue-aws-batch
+ * @link      https://github.com/dnxlabs/laravel-queue-aws-batch
  */
 
-namespace LukeWaite\LaravelQueueAwsBatch\Connectors;
+namespace DNXLabs\LaravelQueueAwsBatch\Connectors;
 
 use Aws\Batch\BatchClient;
 use Illuminate\Queue\Connectors\DatabaseConnector;
 use Illuminate\Support\Arr;
-use LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue;
+use DNXLabs\LaravelQueueAwsBatch\Queues\BatchQueue;
 
 class BatchConnector extends DatabaseConnector
 {
