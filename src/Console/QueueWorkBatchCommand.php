@@ -69,7 +69,7 @@ class QueueWorkBatchCommand extends WorkCommand
     // TOOD: Refactor out the logic here into an extension of the Worker class
     protected function runJob()
     {
-        $connectionName = $this->argument('connection');
+        $connectionName = $connection = $this->argument('connection') ?: $this->laravel['config']['queue.default'];
         $jobId = $this->argument('job_id');
 
         /** @var BatchQueue $connection */
