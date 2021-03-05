@@ -84,12 +84,16 @@ class BatchQueue extends DatabaseQueue
     {
         $jobId = $this->pushToDatabase($queue, $payload);
 
+        $json = json_decode($payload);
+        $data = unserialize($json->data->command);
+
         $this->batch->submitJob([
             'jobDefinition' => $this->jobDefinition,
             'jobName'       => $jobName,
             'jobQueue'      => $this->getQueue($queue),
             'parameters'    => [
-                'jobId' => $jobId,
+                'jobId'        => $jobId,
+                'connectionId' => $data->connection
             ]
         ]);
 
