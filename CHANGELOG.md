@@ -1,5 +1,9 @@
 # Release Notes for 2.x
 
+## v3.0.4 (2021-03-05)
+
+* Fix `queue-work:batch` command connection as optional argument ([#2](https://github.com/dnxlabs/laravel-queue-aws-batch/pull/1))
+
 ## v3.0.0 (2021-02-18)
 
 ### Added
