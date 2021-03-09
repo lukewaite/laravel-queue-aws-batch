@@ -51,7 +51,7 @@ class QueueWorkBatchCommand extends WorkCommand
         $this->exceptions = $exceptions;
     }
 
-    public function fire()
+    public function handle()
     {
         $this->listenForEvents();
 
@@ -103,12 +103,13 @@ class QueueWorkBatchCommand extends WorkCommand
     protected function gatherWorkerOptions()
     {
         return new WorkerOptions(
-            0,
+            0, // delay
             $this->option('memory'),
             $this->option('timeout'),
-            0,
+            0, // sleep
             $this->option('tries'),
-            false
+            false, // force
+            $this->option('stop-when-empty')
         );
     }
 }
