@@ -64,11 +64,13 @@ class BatchQueue extends DatabaseQueue
     protected function getBatchDisplayName($job)
     {
         if (is_object($job)) {
-            return method_exists($job, 'displayName')
+            $jobName = method_exists($job, 'displayName')
                 ? $job->displayName() : str_replace('\\', '_', (string) get_class($job));
         } else {
-            return is_string($job) ? explode('@', $job)[0] : null;
+            $jobName = is_string($job) ? explode('@', $job)[0] : null;
         }
+
+        return str_limit($jobName, 128); // Limit requested by AWS Batch SubmitJob API
     }
 
     /**
