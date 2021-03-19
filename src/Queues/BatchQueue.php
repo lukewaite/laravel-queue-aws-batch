@@ -15,6 +15,7 @@ use Aws\Batch\BatchClient;
 use Illuminate\Database\Connection;
 use Illuminate\Queue\DatabaseQueue;
 use Illuminate\Queue\Jobs\DatabaseJobRecord;
+use Illuminate\Support\Str;
 use DNXLabs\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
 use DNXLabs\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 use DNXLabs\LaravelQueueAwsBatch\Jobs\BatchJob;
@@ -70,7 +71,7 @@ class BatchQueue extends DatabaseQueue
             $jobName = is_string($job) ? explode('@', $job)[0] : null;
         }
 
-        return str_limit($jobName, 128); // Limit requested by AWS Batch SubmitJob API
+        return Str::limit($jobName, 128); // Limit requested by AWS Batch SubmitJob API
     }
 
     /**
