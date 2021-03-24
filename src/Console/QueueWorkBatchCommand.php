@@ -76,6 +76,10 @@ class QueueWorkBatchCommand extends Command
 
         $job = $connection->getJobById($jobId);
 
+        $this->worker->setDaemonExceptionHandler(
+            $this->laravel['Illuminate\Contracts\Debug\ExceptionHandler']
+        );
+
         // If we're able to pull a job off of the stack, we will process it and
         // then immediately return back out.
         if (!is_null($job)) {
