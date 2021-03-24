@@ -1,5 +1,10 @@
 # Release Notes for 1.x
 
+## [v1.2.0] (2021-03-24)
+
+### Added
+* Added the default Handler when creating Worker so that exceptions may be reported during Worker::process
+
 ## [v1.1.1] (2018-08-21)
 
 ### Fixed
