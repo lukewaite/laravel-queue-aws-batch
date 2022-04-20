@@ -6,20 +6,21 @@
  * @copyright 2017 Luke Waite
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  *
- * @link      https://github.com/lukewaite/laravel-queue-aws-batch
+ * @link      https://github.com/dnxlabs/laravel-queue-aws-batch
  */
 
-namespace LukeWaite\LaravelQueueAwsBatch\Console;
+namespace DNXLabs\LaravelQueueAwsBatch\Console;
 
-use Illuminate\Console\Command;
+use Illuminate\Container\Container;
+use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Queue\Console\WorkCommand;
 use Illuminate\Queue\QueueManager;
 use Illuminate\Queue\Worker;
 use Illuminate\Queue\WorkerOptions;
-use LukeWaite\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
-use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
-use LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue;
+use DNXLabs\LaravelQueueAwsBatch\Exceptions\JobNotFoundException;
+use DNXLabs\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
+use DNXLabs\LaravelQueueAwsBatch\Queues\BatchQueue;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 
 class QueueWorkBatchCommand extends WorkCommand
@@ -33,7 +34,11 @@ class QueueWorkBatchCommand extends WorkCommand
                             {connection? : The name of the queue connection to work}
                             {--memory=128 : The memory limit in megabytes}
                             {--timeout=60 : The number of seconds a child process can run}
-                            {--tries=0 : Number of times to attempt a job before logging it failed}';
+                            {--tries=0 : Number of times to attempt a job before logging it failed}
+                            {--force : Force the worker to run even in maintenance mode}
+                            {--queue= : The names of the queues to work}
+                            {--once : Only process the next job on the queue}
+                            {--stop-when-empty : Stop when the queue is empty}';
 
 
     protected $manager;
@@ -41,12 +46,12 @@ class QueueWorkBatchCommand extends WorkCommand
 
     public function __construct(QueueManager $manager, Worker $worker, Handler $exceptions)
     {
-        parent::__construct($worker);
+        parent::__construct($worker, Container::getInstance()->make(Repository::class));
         $this->manager = $manager;
         $this->exceptions = $exceptions;
     }
 
-    public function fire()
+    public function handle()
     {
         $this->listenForEvents();
 
@@ -64,7 +69,7 @@ class QueueWorkBatchCommand extends WorkCommand
     // TOOD: Refactor out the logic here into an extension of the Worker class
     protected function runJob()
     {
-        $connectionName = $this->argument('connection');
+        $connectionName = $connection = $this->argument('connection') ?: $this->laravel['config']['queue.default'];
         $jobId = $this->argument('job_id');
 
         /** @var BatchQueue $connection */
@@ -98,9 +103,13 @@ class QueueWorkBatchCommand extends WorkCommand
     protected function gatherWorkerOptions()
     {
         return new WorkerOptions(
-            0, $this->option('memory'),
-            $this->option('timeout'), 0,
-            $this->option('tries'), false
+            0, // delay
+            $this->option('memory'),
+            $this->option('timeout'),
+            0, // sleep
+            $this->option('tries'),
+            false, // force
+            $this->option('stop-when-empty')
         );
     }
 }

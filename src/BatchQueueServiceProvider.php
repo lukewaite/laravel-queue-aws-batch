@@ -6,14 +6,14 @@
  * @copyright 2017 Luke Waite
  * @license   http://www.opensource.org/licenses/mit-license.php MIT
  *
- * @link      https://github.com/lukewaite/laravel-queue-aws-batch
+ * @link      https://github.com/dnxlabs/laravel-queue-aws-batch
  */
 
-namespace LukeWaite\LaravelQueueAwsBatch;
+namespace DNXLabs\LaravelQueueAwsBatch;
 
 use Illuminate\Support\ServiceProvider;
-use LukeWaite\LaravelQueueAwsBatch\Connectors\BatchConnector;
-use LukeWaite\LaravelQueueAwsBatch\Console\QueueWorkBatchCommand;
+use DNXLabs\LaravelQueueAwsBatch\Connectors\BatchConnector;
+use DNXLabs\LaravelQueueAwsBatch\Console\QueueWorkBatchCommand;
 
 class BatchQueueServiceProvider extends ServiceProvider
 {
