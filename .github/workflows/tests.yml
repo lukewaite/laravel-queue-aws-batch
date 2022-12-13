@@ -47,6 +47,7 @@ jobs:
           cli-args: "--format=php-clover tests/reports/clover.xml --revision=${{ github.event.pull_request.head.sha || github.sha }}"
   phpcs:
     name: phpcs
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
