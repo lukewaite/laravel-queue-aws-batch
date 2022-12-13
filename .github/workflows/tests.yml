@@ -6,7 +6,8 @@ on:
       - main
       - '*.x'
   pull_request:
-
+  schedule:
+    - cron: '0 0 * * *'
 
 permissions:
   contents: read
@@ -37,3 +38,21 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/phpunit
+
+      - name: Upload Scrutinizer coverage
+        uses: sudo-bot/action-scrutinizer@latest
+        with:
+          cli-args: "--format=php-clover tests/reports/clover.xml --revision=${{ github.event.pull_request.head.sha || github.sha }}"
+  phpcs:
+    name: phpcs
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8
+
+      - name: Check PSR-12 Codestyle
+        run: composer check-style
