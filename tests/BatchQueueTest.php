@@ -3,17 +3,13 @@
 namespace LukeWaite\LaravelQueueAwsBatch\Tests;
 
 use Carbon\Carbon;
+use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 use Mockery as m;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 class BatchQueueTest extends TestCase
 {
-    public function tearDown()
-    {
-        m::close();
-    }
-
-    public function setUp()
+    public function setUp() : void
     {
         $this->queue = $this->getMockBuilder('LukeWaite\LaravelQueueAwsBatch\Queues\BatchQueue')->setMethods(null)->setConstructorArgs([
             $this->database = m::mock('Illuminate\Database\Connection'),
@@ -34,23 +30,22 @@ class BatchQueueTest extends TestCase
         $query->shouldReceive('insertGetId')->once()->andReturnUsing(function ($array) {
             $this->assertEquals('default', $array['queue']);
             $this->assertNotNull($array['payload'], 'Payload is not set');
-            $this->assertEquals(['data'], json_decode($array['payload'], 1)['data']);
-            $this->assertEquals('foo', json_decode($array['payload'], 1)['job']);
+            $this->assertEquals(TestJob::class, json_decode($array['payload'], true)['displayName']);
             $this->assertEquals(0, $array['attempts']);
             $this->assertNull($array['reserved_at']);
-            $this->assertInternalType('int', $array['available_at']);
+            $this->assertIsInt($array['available_at']);
 
             return 100;
         });
 
         $this->batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
             $this->assertEquals('jobdefinition', $array['jobDefinition']);
-            $this->assertEquals('foo', $array['jobName']);
+            $this->assertEquals('LukeWaite_LaravelQueueAwsBatch_Tests_TestJob', $array['jobName']);
             $this->assertEquals('default', $array['jobQueue']);
             $this->assertEquals(['jobId' => 100], $array['parameters']);
         });
 
-        $result = $this->queue->push('foo', ['data']);
+        $result = $this->queue->push(new TestJob());
         $this->assertEquals(100, $result);
     }
 
@@ -63,7 +58,7 @@ class BatchQueueTest extends TestCase
         });
 
         $this->batch->shouldReceive('submitJob')->once()->andReturnUsing(function ($array) {
-            $this->assertRegExp('/^[a-zA-Z0-9_]+$/', $array['jobName']);
+            $this->assertMatchesRegularExpression('/^[a-zA-Z0-9_]+$/', $array['jobName']);
             $this->assertEquals('LukeWaite_LaravelQueueAwsBatch_Tests_TestJob', $array['jobName']);
         });
 
@@ -113,25 +108,27 @@ class BatchQueueTest extends TestCase
         $this->assertEquals(4, $result);
     }
 
-    /**
-     * @expectedException \LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
-     */
     public function testPopThrowsException()
     {
+        $this->expectException(UnsupportedException::class);
+        $this->expectExceptionMessage('The BatchQueue does not support running via a regular worker. Instead, you should use the queue:batch-work command with a job id.');
+
         $this->queue->pop('default');
     }
 
-    /**
-     * @expectedException \LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
-     */
     public function testLaterThrowsException()
     {
+        $this->expectException(UnsupportedException::class);
+        $this->expectExceptionMessage('The BatchQueue does not support the later() operation.');
+
         $this->queue->later(10, 'default');
     }
 
-    /** @expectedException \LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException */
     public function testReleaseWithDelayThrowsException()
     {
+        $this->expectException(UnsupportedException::class);
+        $this->expectExceptionMessage('The BatchJob does not support releasing back onto the queue with a delay');
+
         $job = new \stdClass();
         $job->payload = '{"job":"foo","data":["data"]}';
         $job->id = 4;
