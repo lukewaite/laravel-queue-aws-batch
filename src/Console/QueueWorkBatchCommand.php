@@ -98,9 +98,12 @@ class QueueWorkBatchCommand extends WorkCommand
     protected function gatherWorkerOptions()
     {
         return new WorkerOptions(
-            0, $this->option('memory'),
-            $this->option('timeout'), 0,
-            $this->option('tries'), false
+            0,
+            $this->option('memory'),
+            $this->option('timeout'),
+            0,
+            $this->option('tries'),
+            false
         );
     }
 }

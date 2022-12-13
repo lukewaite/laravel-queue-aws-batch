@@ -4,3 +4,4 @@ vendor
 composer.lock
 .phpstorm.meta.php
 tests/reports
+.phpunit.result.cache

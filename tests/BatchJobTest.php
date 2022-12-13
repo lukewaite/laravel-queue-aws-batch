@@ -2,17 +2,13 @@
 
 namespace LukeWaite\LaravelQueueAwsBatch\Tests;
 
+use LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException;
 use Mockery as m;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
 class BatchJobTest extends TestCase
 {
-    public function tearDown()
-    {
-        m::close();
-    }
-
-    public function setUp()
+    public function setUp() : void
     {
         $this->job = new \stdClass();
         $this->job->payload = '{"job":"foo","data":["data"]}';
@@ -38,11 +34,11 @@ class BatchJobTest extends TestCase
         $this->batchJob->release(0);
     }
 
-    /**
-     * @expectedException \LukeWaite\LaravelQueueAwsBatch\Exceptions\UnsupportedException
-     */
     public function testThrowsExceptionOnReleaseWIthDelay()
     {
+        $this->expectException(UnsupportedException::class);
+        $this->expectExceptionMessage('The BatchJob does not support releasing back onto the queue with a delay');
+
         $this->batchQueue->shouldNotReceive('release');
         $this->batchQueue->shouldNotReceive('deleteReserved');
 
