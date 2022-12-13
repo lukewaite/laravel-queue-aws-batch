@@ -17,11 +17,12 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
-      fail-fast: true
       matrix:
         php: [ '7.3', '7.4', '8.0', '8.1', '8.2' ]
+        laravel: [^8]
+        dependency-version: [prefer-lowest, prefer-stable]
 
-    name: PHP ${{ matrix.php }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{dependency-version}}
 
     steps:
       - name: Checkout code
@@ -35,11 +36,18 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: xdebug
 
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
+      - name: Install dependencies
+        run: |
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-progress
 
       - name: Execute tests
         run: vendor/bin/phpunit
+
+      - name: PHPStan Static Analysis
+        uses: php-actions/phpstan@v3
+        with:
+          path: src/
 
       - name: Upload Scrutinizer coverage
         uses: sudo-bot/action-scrutinizer@latest
@@ -53,13 +61,3 @@ jobs:
       - uses: php-actions/composer@v6
       - name: Check PSR-12 Codestyle
         run: composer check-style
-
-  phpstan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: php-actions/composer@v6
-      - name: PHPStan Static Analysis
-        uses: php-actions/phpstan@v3
-        with:
-          path: src/
