@@ -20,19 +20,7 @@ class BatchQueueServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton(
-            'command.queueawsbatch.work-batch',
-            function ($app) {
-                return new QueueWorkBatchCommand(
-                    $app['queue'],
-                    $app['queue.worker'],
-                    $app['Illuminate\Foundation\Exceptions\Handler'],
-                    $app['cache']
-                );
-            }
-        );
-
-        $this->commands('command.queueawsbatch.work-batch');
+        $this->commands(QueueWorkBatchCommand::class);
     }
 
     public function boot()
