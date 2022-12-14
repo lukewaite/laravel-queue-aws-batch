@@ -36,6 +36,6 @@
     "test": "phpunit",
     "check-style": "phpcs -p --standard=psr12 src/",
     "fix-style": "phpcbf -p --standard=psr12 src/",
-    "phpstan": "phpstan analyse -l 9 src"
+    "phpstan": "phpstan analyse"
   }
 }

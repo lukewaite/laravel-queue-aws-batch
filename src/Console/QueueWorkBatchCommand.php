@@ -61,7 +61,7 @@ class QueueWorkBatchCommand extends WorkCommand
     }
 
     // TOOD: Refactor out the logic here into an extension of the Worker class
-    protected function runJob()
+    protected function runJob(): void
     {
         $connectionName = $this->argument('connection');
         $jobId = $this->argument('job_id');
@@ -73,16 +73,17 @@ class QueueWorkBatchCommand extends WorkCommand
             throw new UnsupportedException('queue:work-batch can only be run on batch queues');
         }
 
-        $job = $connection->getJobById($jobId, $connectionName);
+        $job = $connection->getJobById($jobId);
 
         // If we're able to pull a job off of the stack, we will process it and
-        // then immediately return back out.
+        // then immediately return.
         if (!is_null($job)) {
-            return $this->worker->process(
+            $this->worker->process(
                 $this->manager->getName($connectionName),
                 $job,
                 $this->gatherWorkerOptions()
             );
+            return;
         }
 
         // If we hit this point, we haven't processed our job

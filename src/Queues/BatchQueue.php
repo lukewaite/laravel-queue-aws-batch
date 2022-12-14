@@ -101,7 +101,6 @@ class BatchQueue extends DatabaseQueue
         $this->database->beginTransaction();
 
         $job = $this->database->table($this->table)
-            ->lockForUpdate()
             ->where('id', $id)
             ->first();
 
@@ -112,7 +111,7 @@ class BatchQueue extends DatabaseQueue
 
         $job = new DatabaseJobRecord($job);
 
-        return $this->marshalJob($job->queue, $job);
+        return $this->marshalJob($this->default, $job);
     }
 
     protected function marshalJob($queue, $job)

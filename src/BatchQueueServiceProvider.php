@@ -12,6 +12,8 @@
 
 namespace LukeWaite\LaravelQueueAwsBatch;
 
+use Illuminate\Queue\Queue;
+use Illuminate\Queue\QueueManager;
 use Illuminate\Support\ServiceProvider;
 use LukeWaite\LaravelQueueAwsBatch\Connectors\BatchConnector;
 use LukeWaite\LaravelQueueAwsBatch\Console\QueueWorkBatchCommand;
@@ -23,19 +25,19 @@ class BatchQueueServiceProvider extends ServiceProvider
         $this->commands(QueueWorkBatchCommand::class);
     }
 
-    public function boot()
+    public function boot(QueueManager $queue)
     {
-        $this->registerBatchConnector($this->app['queue']);
+        $this->registerBatchConnector($queue);
     }
 
     /**
      * Register the Batch queue connector.
      *
-     * @param \Illuminate\Queue\QueueManager $manager
+     * @param QueueManager $manager
      *
      * @return void
      */
-    protected function registerBatchConnector($manager)
+    protected function registerBatchConnector(QueueManager $manager)
     {
         $manager->addConnector('batch', function () {
             return new BatchConnector($this->app['db']);
