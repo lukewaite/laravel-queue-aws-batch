@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Laravel Queue for AWS Batch.
  *
@@ -12,6 +13,7 @@
 namespace LukeWaite\LaravelQueueAwsBatch\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Queue\Console\WorkCommand;
 use Illuminate\Queue\QueueManager;
@@ -39,9 +41,9 @@ class QueueWorkBatchCommand extends WorkCommand
     protected $manager;
     protected $exceptions;
 
-    public function __construct(QueueManager $manager, Worker $worker, Handler $exceptions)
+    public function __construct(QueueManager $manager, Worker $worker, Handler $exceptions, Cache $cache)
     {
-        parent::__construct($worker);
+        parent::__construct($worker, $cache);
         $this->manager = $manager;
         $this->exceptions = $exceptions;
     }
@@ -52,11 +54,8 @@ class QueueWorkBatchCommand extends WorkCommand
 
         try {
             $this->runJob();
-        } catch (\Exception $e) {
-            $this->exceptions->report($e);
-            throw $e;
         } catch (\Throwable $e) {
-            $this->exceptions->report(new FatalThrowableError($e));
+            $this->exceptions->report($e);
             throw $e;
         }
     }
@@ -74,16 +73,17 @@ class QueueWorkBatchCommand extends WorkCommand
             throw new UnsupportedException('queue:work-batch can only be run on batch queues');
         }
 
-        $job = $connection->getJobById($jobId, $connectionName);
+        $job = $connection->getJobById($jobId);
 
         // If we're able to pull a job off of the stack, we will process it and
         // then immediately return back out.
         if (!is_null($job)) {
-            return $this->worker->process(
+            $this->worker->process(
                 $this->manager->getName($connectionName),
                 $job,
                 $this->gatherWorkerOptions()
             );
+            return;
         }
 
         // If we hit this point, we haven't processed our job

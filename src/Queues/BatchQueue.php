@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Laravel Queue for AWS Batch.
  *
@@ -111,7 +112,7 @@ class BatchQueue extends DatabaseQueue
 
         $job = new DatabaseJobRecord($job);
 
-        return $this->marshalJob($job->queue, $job);
+        return $this->marshalJob($this->default, $job);
     }
 
     protected function marshalJob($queue, $job)
