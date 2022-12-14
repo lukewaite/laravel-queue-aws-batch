@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Laravel Queue for AWS Batch.
  *

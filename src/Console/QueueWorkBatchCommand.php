@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Laravel Queue for AWS Batch.
  *
@@ -13,7 +12,6 @@
 namespace LukeWaite\LaravelQueueAwsBatch\Console;
 
 use Illuminate\Console\Command;
-use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Queue\Console\WorkCommand;
 use Illuminate\Queue\QueueManager;
@@ -41,9 +39,9 @@ class QueueWorkBatchCommand extends WorkCommand
     protected $manager;
     protected $exceptions;
 
-    public function __construct(QueueManager $manager, Worker $worker, Handler $exceptions, Cache $cache)
+    public function __construct(QueueManager $manager, Worker $worker, Handler $exceptions)
     {
-        parent::__construct($worker, $cache);
+        parent::__construct($worker);
         $this->manager = $manager;
         $this->exceptions = $exceptions;
     }
@@ -54,14 +52,17 @@ class QueueWorkBatchCommand extends WorkCommand
 
         try {
             $this->runJob();
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
             $this->exceptions->report($e);
+            throw $e;
+        } catch (\Throwable $e) {
+            $this->exceptions->report(new FatalThrowableError($e));
             throw $e;
         }
     }
 
     // TOOD: Refactor out the logic here into an extension of the Worker class
-    protected function runJob(): void
+    protected function runJob()
     {
         $connectionName = $this->argument('connection');
         $jobId = $this->argument('job_id');
@@ -73,17 +74,16 @@ class QueueWorkBatchCommand extends WorkCommand
             throw new UnsupportedException('queue:work-batch can only be run on batch queues');
         }
 
-        $job = $connection->getJobById($jobId);
+        $job = $connection->getJobById($jobId, $connectionName);
 
         // If we're able to pull a job off of the stack, we will process it and
-        // then immediately return.
+        // then immediately return back out.
         if (!is_null($job)) {
-            $this->worker->process(
+            return $this->worker->process(
                 $this->manager->getName($connectionName),
                 $job,
                 $this->gatherWorkerOptions()
             );
-            return;
         }
 
         // If we hit this point, we haven't processed our job
