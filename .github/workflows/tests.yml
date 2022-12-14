@@ -17,8 +17,8 @@ jobs:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
-        fail-fast: false
         php: [ '7.3', '7.4', '8.0', '8.1', '8.2' ]
         laravel: [^8]
         dependency-version: [prefer-lowest, prefer-stable]
